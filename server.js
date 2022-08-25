@@ -1,9 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-
-// const pool = require('./configs/mysql')
-// const router = require('./routes')
+const pool = require('./configs/mysql')
 
 const PORT = process.env.PORT || 8080
 
@@ -14,17 +12,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 // app.use(router)
 
-// router.get('/api/v1.0/blog', async (req, res, next) => {
-//   let [data] = await pool.execute('SELECT * FROM blog')
-//   res.json(data)
-//   next()
-// })
-
-// router.get('/api/v1.0/blog', async (req, res, next) => {
-//   let [data] = await pool.execute('SELECT * FROM blog')
-//   res.json(data)
-//   next()
-// })
+app.get('/api/v1.0/blog', async (req, res, next) => {
+  let [data] = await pool.execute('SELECT * FROM user')
+  res.json(data)
+  next()
+})
 
 app.get('/', (req, res) => {
   res.send('homepage')
