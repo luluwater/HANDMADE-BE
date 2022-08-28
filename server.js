@@ -22,7 +22,7 @@ const router = require('express').Router()
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/')
+    cb(null, 'public')
   },
   filename: function (req, file, cb) {
     let ext = file.originalname.split('.')
