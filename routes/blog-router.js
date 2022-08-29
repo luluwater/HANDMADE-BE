@@ -23,10 +23,9 @@ router.get('/:blogId', async (req, res) => {
     [blogId]
   )
   let [comment] = await pool.execute(
-    'SELECT comment.*, blog.id FROM comment JOIN blog ON comment.blog_id = blog.id WHERE blog.id = ?', [blogId]
+    'SELECT comment.*, blog.id, comment.id AS comment_id FROM comment JOIN blog ON comment.blog_id = blog.id WHERE blog.id = ?', [blogId]
   )
   console.log(comment)
-  const detail = blog
   console.log(blog)
 
   res.json({
