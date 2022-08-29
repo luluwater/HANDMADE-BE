@@ -18,12 +18,26 @@ router.get('/', async (req, res) => {
 router.get('/:blogId', async (req, res) => {
   const blogId = req.params.blogId
 
-  let [data] = await pool.execute(
+  let [blog] = await pool.execute(
     'SELECT blog.*, category.category_name, user.*, store.*, blog.id AS blog_id FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id JOIN store ON blog.store_id = store.id WHERE blog.id = ?',
     [blogId]
   )
-  res.json(data)
+  let [comment] = await pool.execute(
+    'SELECT comment.*, blog.id FROM comment JOIN blog ON comment.blog_id = blog.id WHERE blog.id = ?', [blogId]
+  )
+  console.log(comment)
+  const detail = blog
+  console.log(blog)
+
+  res.json({
+    comment: {
+      comment
+    },
+    blog,
+  });
 })
+
+
 
 
 
