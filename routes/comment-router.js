@@ -7,10 +7,11 @@ const pool = require('../configs/mysql')
 router.post('/', async (req, res) => {
 
 
-  const {id, content, user_id , blog_id } = req.body
+  const {id, content, user_id , blog_id, comment_date } = req.body
 
- await pool.execute(`INSERT IGNORE INTO comment (id, content, user_id, blog_id) VALUES (?, ?, ?, ? )`,[ id, content, user_id, blog_id])
+ await pool.execute(`INSERT IGNORE INTO comment (id, content, user_id, blog_id, comment_date) VALUES (?, ?, ?, ? , ?)`,[ id, content, user_id, blog_id, comment_date])
 
+ console.log(comment_date)
  res.send('success')
 
 })
