@@ -16,15 +16,14 @@ router.get('/', async (req, res) => {
 })
 
 
-// http://localhost:8080/api/comment --> 插入留言
+// http://localhost:8080/api/reply --> 插入回覆
 router.post('/', async (req, res) => {
 
+  const {id, reply_content, user_id , reply_date, comment_id } = req.body
 
-  const {id, content, user_id , blog_id, comment_date } = req.body
+ await pool.execute(`INSERT IGNORE INTO reply (id, reply_content, user_id, reply_date, comment_id) VALUES (?, ?, ?, ? , ?)`,[ id, reply_content, user_id, reply_date, comment_id])
 
- await pool.execute(`INSERT IGNORE INTO comment (id, content, user_id, blog_id, comment_date) VALUES (?, ?, ?, ? , ?)`,[ id, content, user_id, blog_id, comment_date])
-
- console.log(comment_date)
+ console.log('success submit')
  res.send('success')
 
 })
