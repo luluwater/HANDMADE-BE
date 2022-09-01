@@ -14,7 +14,7 @@ const createComment = async (req,res) => {
 
   const {id, content, user_id , blog_id, comment_date } = req.body
 
-  await pool.execute(`INSERT IGNORE INTO comment (id, content, user_id, blog_id, comment_date) VALUES (?, ?, ?, ? , ?)`,[ id, content, user_id, blog_id, comment_date])
+  await pool.execute(`INSERT IGNORE INTO comment (id, content, user_id, blog_id, comment_date, state , valid ) VALUES (?, ?, ?, ? , ? , 1 , 1)`,[ id, content, user_id, blog_id, comment_date])
 
   console.log(comment_date)
   res.send('INSERT comment success')
