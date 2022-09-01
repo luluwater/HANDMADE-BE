@@ -1,5 +1,7 @@
 const pool = require('../configs/mysql')
 
+
+//get http://localhost:8080/api/reply
 const getReply = async (req, res) => {
   
   let [reply] = await pool.execute(
@@ -9,6 +11,7 @@ const getReply = async (req, res) => {
   res.json(reply);
 }
 
+//post  http://localhost:8080/api/reply
 const createReply = async (req, res) => {
 
   const {id, reply_content, user_id , reply_date, comment_id } = req.body
