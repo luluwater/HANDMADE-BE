@@ -1,41 +1,15 @@
 const router = require('express').Router()
-const pool = require('../configs/mysql')
-// const { index } = require('../controllers/blog-controller')
+const { getAllBlog, getBlogDetail} = require('../controllers/blog-controller')
 
-//RESEful API
+router.get('/', getAllBlog)
 
-// http://localhost:8080/api/blog --> 顯示所有部落格
-router.get('/', async (req, res) => {
-  let [data] = await pool.execute(
-    'SELECT blog.*, category.category_name, user.*, blog.id AS blog_id FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id ORDER BY blog.create_time DESC'
-  )
+router.get('/:blogId', getBlogDetail)
 
-  res.json(data)
-})
+// router.post('/', createBlog)
 
-//連結 store,user,category,blog_comment這幾個資料表
-//http://localhost:8080/api/blog/:blogId --> 顯示單一部落格
-router.get('/:blogId', async (req, res) => {
-  const blogId = req.params.blogId
+// router.put('/:blogId', updateBlog)
 
-  let [blog] = await pool.execute(
-    'SELECT blog.*, category.category_name, user.*, store.*, blog.id AS blog_id FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id JOIN store ON blog.store_id = store.id WHERE blog.id = ?',
-    [blogId]
-  )
-  let [comment] = await pool.execute(
-    'SELECT comment.*, blog.id, user.name, user.avatar , comment.id AS comment_id FROM comment JOIN blog ON comment.blog_id = blog.id JOIN user ON comment.user_id = user.id WHERE blog.id = ?', [blogId]
-  )
-
-  res.json({
-    comment: {
-      comment
-    },
-    blog,
-  });
-})
-
-
-
+// router.delete('/:blogId', deleteBlog)
 
 
 module.exports = router
