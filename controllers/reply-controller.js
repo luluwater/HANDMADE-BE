@@ -3,7 +3,7 @@ const pool = require('../configs/mysql')
 const getReply = async (req, res) => {
   
   let [reply] = await pool.execute(
-    'SELECT reply.*, user.*, comment.id, reply.id AS reply_id, user.id AS user_id FROM reply JOIN user ON reply.user_id = user.id JOIN comment ON reply.comment_id = comment.id ORDER BY reply.reply_date DESC'
+    'SELECT reply.*, user.*, comment.id, reply.id AS reply_id, user.id AS user_id FROM reply JOIN user ON reply.user_id = user.id JOIN comment ON reply.comment_id = comment.id WHERE reply.state = 1 ORDER BY reply.reply_date DESC'
   )
 
   res.json(reply);
@@ -13,7 +13,7 @@ const createReply = async (req, res) => {
 
   const {id, reply_content, user_id , reply_date, comment_id } = req.body
 
- await pool.execute(`INSERT IGNORE INTO reply (id, reply_content, user_id, reply_date, comment_id) VALUES (?, ?, ?, ? , ?)`,[ id, reply_content, user_id, reply_date, comment_id])
+ await pool.execute(`INSERT IGNORE INTO reply (id, reply_content, user_id, reply_date, comment_id, state) VALUES (?, ?, ?, ? , ?, ?)`,[ id, reply_content, user_id, reply_date, comment_id , 1])
 
  console.log('success submit')
  res.send('success')
@@ -21,7 +21,18 @@ const createReply = async (req, res) => {
 }
 
 
+const deleteReply = async (req,res)=>{
+  const { id } = req.body
+  if( id === undefined ) return 
+
+  await pool.execute(`UPDATE reply SET state = 0 WHERE id = ?`,[id])
+ 
+  res.send('success send')
+
+}
+
 module.exports = {
   getReply,
   createReply,
+  deleteReply
 }
