@@ -23,7 +23,7 @@ const createReply = async (req, res) => {
 
 }
 
-
+//delete  http://localhost:8080/api/reply
 const deleteReply = async (req,res)=>{
   const { id } = req.body
   if( id === undefined ) return 
