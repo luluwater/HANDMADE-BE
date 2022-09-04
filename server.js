@@ -16,6 +16,8 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+
+
 app.use('/api/chat', chatRouter)
 app.use('/api/blog', blogRouter)
 app.use('/api/comment', commentRouter)
