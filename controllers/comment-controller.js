@@ -4,7 +4,7 @@ const getAllComment =  async (req, res) => {
   const blogId = req.params.blogId
 
   let [comment] = await pool.execute(
-    'SELECT comment.*, blog.id, user.name, user.avatar , comment.id AS comment_id FROM comment JOIN blog ON comment.blog_id = blog.id JOIN user ON comment.user_id = user.id WHERE blog.id = ? ORDER BY comment.comment_date ASC', [blogId]
+    'SELECT comment.*, blog.id, user.name, user.avatar , comment.id AS comment_id FROM comment JOIN blog ON comment.blog_id = blog.id JOIN user ON comment.user_id = user.id WHERE blog.id = ? AND comment.valid = 1 ORDER BY comment.comment_date ASC', [blogId]
   )
  
   res.json(comment);
@@ -24,9 +24,20 @@ const createComment = async (req,res) => {
 }
 
 
+const deleteComment = async (req,res)=>{
+  const { id } = req.body
+  if( id === undefined ) return 
+
+  await pool.execute(`UPDATE comment SET valid = 0 WHERE id = ?`,[id])
+ 
+  res.send('success delete comment')
+
+}
+
 
 module.exports = {
   getAllComment,
   createComment,
+  deleteComment
 }
 
