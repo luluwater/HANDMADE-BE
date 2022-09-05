@@ -13,8 +13,6 @@ const getAllComment =  async (req, res) => {
 const createComment = async (req,res) => {
 
   const {id, content, user_id , blog_id, comment_date } = req.body
-  
-  console.log(req.body)
 
   await pool.execute(`INSERT IGNORE INTO comment (id, content, user_id, blog_id, comment_date, state , valid ) VALUES (?, ?, ?, ? , ? , 1 , 1)`,[ id, content, user_id, blog_id, comment_date])
 
@@ -36,10 +34,25 @@ const deleteComment = async (req,res)=>{
 
 }
 
+const updateComment = async (req,res)=>{
+ 
+  const { commentId, contentInput ,comment_date } = req.body.updateData
+
+  console.log(commentId, contentInput,comment_date) 
+
+ 
+  await pool.execute(`UPDATE comment SET content = '${contentInput}', comment_date = '${comment_date}', isEdited = '1' WHERE comment.id = ?`,[commentId])
+ 
+  console.log('success update comment')
+  res.send('success update comment')
+
+}
+
 
 module.exports = {
   getAllComment,
   createComment,
-  deleteComment
+  deleteComment,
+  updateComment
 }
 
