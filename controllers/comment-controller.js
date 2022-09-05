@@ -25,10 +25,12 @@ const createComment = async (req,res) => {
 
 
 const deleteComment = async (req,res)=>{
-  const { id } = req.body
-  if( id === undefined ) return 
+ 
+  const { commentId } = req.body
 
-  await pool.execute(`UPDATE comment SET valid = 0 WHERE id = ?`,[id])
+  if( commentId === undefined ) return 
+ 
+  await pool.execute(`UPDATE comment SET valid = 0 WHERE id = ?`,[commentId])
  
   res.send('success delete comment')
 
