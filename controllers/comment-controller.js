@@ -38,9 +38,8 @@ const updateComment = async (req,res)=>{
  
   const { commentId, contentInput ,comment_date } = req.body.updateData
 
-  console.log(commentId, contentInput,comment_date) 
+  console.log()
 
- 
   await pool.execute(`UPDATE comment SET content = '${contentInput}', comment_date = '${comment_date}', isEdited = '1' WHERE comment.id = ?`,[commentId])
  
   console.log('success update comment')
@@ -52,7 +51,6 @@ const updateComment = async (req,res)=>{
 module.exports = {
   getAllComment,
   createComment,
-  deleteComment,
+  deleteComment, 
   updateComment
 }
-
