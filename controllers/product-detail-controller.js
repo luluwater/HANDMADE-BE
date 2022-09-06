@@ -1,8 +1,16 @@
 const pool = require('../configs/mysql')
 
-const getProductDetail = async (req, res) => {
-  const [detail] = await pool.execute(`SELECT * FROM product`)
-  res.json(detail)
+const getProductAll = async (req, res) => {
+  const [data] = await pool.execute('SELECT * FROM product')
+  res.json(data)
 }
 
-module.exports = getProductDetail
+const getProductDetail = async (req, res) => {
+  console.log(req)
+  const productId = req.params.productId
+  const [product] = await pool.execute('SELECT * FROM product WHERE id = ?', [productId])
+  res.json(product)
+  res.send('sucess')
+}
+
+module.exports = { getProductAll, getProductDetail }
