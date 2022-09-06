@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 
 const chatRouter = require('./routes/chat-router')
 const blogRouter = require('./routes/blog-router')
+const productDetailRouter = require('./routes/product-detail-router')
 // const userRouter = require('./routes/user-router')
 
 const PORT = process.env.PORT || 8080
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/api/chat', chatRouter)
 app.use('/api/blog', blogRouter)
+app.use('/api/productDetail', productDetailRouter)
 // app.use('/api/user', userRouter)
 
 app.get('/', (req, res) => {
