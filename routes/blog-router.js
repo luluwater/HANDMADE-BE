@@ -1,15 +1,16 @@
 const router = require('express').Router()
-const { getAllBlog, getBlogDetail} = require('../controllers/blog-controller')
+const { getAllBlog, getBlogDetail ,createBlog} = require('../controllers/blog-controller')
 
 router.get('/', getAllBlog)
 
 router.get('/:blogId', getBlogDetail)
 
-// router.post('/', createBlog)
+router.post('/', createBlog)
 
-// router.put('/:blogId', updateBlog)
+//TODO: 這樣寫會不會比較好? RESTFUL??
+// router.put('/:blogId/edit', updateBlog)
 
-// router.delete('/:blogId', deleteBlog)
+// router.delete('/:blogId/delete', deleteBlog)
 
 
 module.exports = router

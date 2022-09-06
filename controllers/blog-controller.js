@@ -31,28 +31,22 @@ const getBlogDetail = async (req, res) => {
 }
 
 
-// const createBlog = ((req, res) => {
 
-//   const {id, content, user_id , blog_id, comment_date } = req.body
 
-//   await pool.execute(`INSERT IGNORE INTO comment (id, content, user_id, blog_id, comment_date) VALUES (?, ?, ?, ? , ?)`,[ id, content, user_id, blog_id, comment_date])
+const createBlog = async (req, res) => {
 
-//   res.status(200).json('Blog created')
-// })
+  const {id , user_id, title , content , category_id, store_id, tag ,create_time } = req.body
 
-// const updateBlog = ((req, res) => {
+  await pool.execute(`INSERT IGNORE INTO blog (id, user_id, title, content, category_id , tag , store_id , create_time) VALUES (?, ?, ?, ? , ? , ? , ? , ?)`,[ id, user_id, title, content, category_id, store_id, tag, create_time])
 
-//   res.status(200).json('Blog updated')
-// })
-
-// const deleteBlog = ((req, res) => {
- 
-//   res.status(200).json('blog deleted')
-// })
+  console.log('Blog created success!!')
+  res.status(200).json('Blog created success!!')
+}
 
 
 
 module.exports = {
   getAllBlog,
   getBlogDetail,
+  createBlog,
 }
