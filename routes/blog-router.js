@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { getAllBlog, getBlogDetail ,createBlog} = require('../controllers/blog-controller')
+const { getAllBlog, getBlogDetail, createBlog, deleteBlog } = require('../controllers/blog-controller')
 
 router.get('/', getAllBlog)
 
@@ -10,7 +10,7 @@ router.post('/', createBlog)
 //TODO: 這樣寫會不會比較好? RESTFUL??
 // router.put('/:blogId/edit', updateBlog)
 
-// router.delete('/:blogId/delete', deleteBlog)
+router.delete('/:blogId', deleteBlog)
 
 
 module.exports = router
