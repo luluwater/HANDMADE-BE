@@ -13,4 +13,4 @@ const getUserAccount = async (req, res) => {
 //WHERE user.id = 1
 // module.exports = {  getUserAccount, updateUserAccount }
 
-module.exports = { getUserAccount}
+module.exports = { getUserAccount }
