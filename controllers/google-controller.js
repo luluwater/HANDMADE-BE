@@ -1,27 +1,7 @@
 const nodemailer = require('nodemailer')
 const { google } = require('googleapis')
 require('dotenv').config()
-
-/**
- * 用拿到的 cliend_id 和 client_secret來建立一個新的 OAuth2
- */
-const oAuth2Client = new google.auth.OAuth2('1086238500382-h5o060c5dl77q244fm2ajhr5rrf7ucp4.apps.googleusercontent.com', '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')
-
-/**
- * 並在建立的 oAuth 中設置他的 Credentials，裡面要放入 refresh token
- */
-oAuth2Client.setCredentials({
-  refresh_token: '1//0er2OEMxyNVx1CgYIARAAGA4SNwF-L9Irt-r23Ebwdu2qrbUDn20Eolut-1mwQEsKjYZsDk7ThXktILS4e6Hugl4AcifCU85o4Tk',
-})
-
-
-const auth = {
-  type: 'OAuth2',
-  user: 'angusapril648@gmail.com',
-  clientId: '1086238500382-h5o060c5dl77q244fm2ajhr5rrf7ucp4.apps.googleusercontent.com',
-  clientSecret: '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',
-  refreshToken: '1//0er2OEMxyNVx1CgYIARAAGA4SNwF-L9Irt-r23Ebwdu2qrbUDn20Eolut-1mwQEsKjYZsDk7ThXktILS4e6Hugl4AcifCU85o4Tk',
-}
+const { authorize } = require('../configs/googleAuth')
 
 
 /**
@@ -30,6 +10,33 @@ const auth = {
  */
 //GET http://localhost:8080/api/google/sendmail
 const sendMail = async (req, res) => {
+
+  const authRefreshData = await authorize()
+  const clientId = authRefreshData._clientId
+  const clientSecret = authRefreshData._clientSecret
+  const refreshToken = authRefreshData.credentials.refresh_token
+
+  /**
+   * 用拿到的 cliend_id 和 client_secret來建立一個新的 OAuth2
+   */
+  const oAuth2Client = new google.auth.OAuth2( clientId, clientSecret)
+
+  /**
+   * 並在建立的 oAuth 中設置他的 Credentials，裡面要放入 refresh token
+   */
+  oAuth2Client.setCredentials({
+    refresh_token: refreshToken,
+  })
+
+
+  const auth = {
+    type: 'OAuth2',
+    user: 'angusapril648@gmail.com',
+    clientId: clientId,
+    clientSecret: clientSecret,
+    refreshToken,
+  }
+
 
   //TODO:把 GMAIL 和內容放在這
   const mailoptions = {
@@ -58,11 +65,13 @@ const sendMail = async (req, res) => {
     }
 
     const result = await transport.sendMail(mailOptions)
+    console.log('Success send the mail')
     res.send(result)
   } catch (error) {
     console.log(error)
     res.send(error)
   }
+  
 }
 
 

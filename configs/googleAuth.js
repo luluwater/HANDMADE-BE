@@ -1,6 +1,5 @@
 /**
  * !生成 token json 檔案的檔案
- *要 install  @google-cloud/local-auth && googleapis
  */
 
 const fs = require('fs').promises
@@ -70,4 +69,4 @@ async function authorize() {
   return client
 }
 
-authorize()
+module.exports = { authorize }
