@@ -8,7 +8,7 @@ const getReply = async (req, res) => {
     'SELECT reply.*, user.*, comment.id, reply.id AS reply_id, user.id AS user_id FROM reply JOIN user ON reply.user_id = user.id JOIN comment ON reply.comment_id = comment.id WHERE reply.state = 1 ORDER BY reply.reply_date ASC'
   )
 
-  res.json(reply);
+  res.json(reply)
 }
 
 //post  http://localhost:8080/api/reply

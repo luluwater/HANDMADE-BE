@@ -3,7 +3,7 @@ const pool = require('../configs/mysql')
 const getAllBlog = async (req,res) =>{
 
   let [data] = await pool.execute(
-    'SELECT blog.*, category.category_name, user.*, blog.id AS blog_id FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id ORDER BY blog.create_time DESC'
+    'SELECT blog.*, category.category_name, user.*, blog.id AS blog_id FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id WHERE blog.valid = 1  ORDER BY blog.create_time DESC'
   )
   res.json(data)
 }
@@ -31,28 +31,36 @@ const getBlogDetail = async (req, res) => {
 }
 
 
-// const createBlog = ((req, res) => {
 
-//   const {id, content, user_id , blog_id, comment_date } = req.body
 
-//   await pool.execute(`INSERT IGNORE INTO comment (id, content, user_id, blog_id, comment_date) VALUES (?, ?, ?, ? , ?)`,[ id, content, user_id, blog_id, comment_date])
+const createBlog = async (req, res) => {
 
-//   res.status(200).json('Blog created')
-// })
+  const {id , user_id, title , content , category_id, store_id, tag ,create_time } = req.body
+  console.log(req.body)
 
-// const updateBlog = ((req, res) => {
+  await pool.execute(`INSERT IGNORE INTO blog (id, user_id, title, content, category_id ,store_id , tag , create_time) VALUES (?, ?, ?, ? , ? , ? , ? , ?)`,[ id, user_id, title, content, category_id, store_id, tag, create_time])
 
-//   res.status(200).json('Blog updated')
-// })
+  console.log('Blog created success!!')
+  res.status(200).json('Blog created success!!')
+}
 
-// const deleteBlog = ((req, res) => {
+const deleteBlog = async (req,res)=>{
  
-//   res.status(200).json('blog deleted')
-// })
+  const id = req.params.blogId
+
+  if( id === undefined ) return 
+ 
+  await pool.execute(`UPDATE blog SET valid = 0 WHERE blog.id = ?`,[id])
+
+  res.send('success delete Blog')
+
+}
 
 
 
 module.exports = {
   getAllBlog,
   getBlogDetail,
+  createBlog,
+  deleteBlog
 }

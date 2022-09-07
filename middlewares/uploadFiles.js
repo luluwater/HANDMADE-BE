@@ -12,11 +12,15 @@ const multer = require('multer')
    filename: function (req, file, cb) {
      let ext = file.originalname.split('.')
      ext = ext[ext.length - 1]
-     //用日期來給檔案名稱
-     cb(null, `${Date.now()}.${ext}`)
+     //TODO: 改成 uuid
+     cb(null, `blog-${Date.now()}.${ext}`)
    },
  })
+
+ // TODO: 還可以過濾圖片、篩選檔案型別 file.mimetype
  const upload = multer({ storage })
+
+
  var corsOptions = {
    origin: 'http://localhost:3000',
    optionsSuccessStatus: 200,
