@@ -14,7 +14,7 @@ const getBlogDetail = async (req, res) => {
   const blogId = req.params.blogId
 
   let [blog] = await pool.execute(
-    'SELECT blog.*, category.category_name, user.*, store.*, blog.id AS blog_id FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id JOIN store ON blog.store_id = store.id WHERE blog.id = ?',
+    'SELECT blog.*, category.category_name, user.*, store.*, blog.id AS blog_id, blog.create_time AS blog_create_time FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id JOIN store ON blog.store_id = store.id WHERE blog.id = ?',
     [blogId]
   )
   let [comment] = await pool.execute(
@@ -30,13 +30,9 @@ const getBlogDetail = async (req, res) => {
 
 }
 
-
-
-
 const createBlog = async (req, res) => {
 
   const {id , user_id, title , content , category_id, store_id, tag ,create_time } = req.body
-  console.log(req.body)
 
   await pool.execute(`INSERT IGNORE INTO blog (id, user_id, title, content, category_id ,store_id , tag , create_time) VALUES (?, ?, ?, ? , ? , ? , ? , ?)`,[ id, user_id, title, content, category_id, store_id, tag, create_time])
 
@@ -57,10 +53,25 @@ const deleteBlog = async (req,res)=>{
 }
 
 
+const updateBlog = async (req, res) => {
+  // console.log(req)
+  // console.log(' 拿到嚕 blogId ',blogId)
+  const { blogId } = req.params
+
+  const {  title , content, create_time } = req.body
+
+  await pool.execute(`UPDATE blog SET title= ?, content= ? , create_time = ? WHERE blog.id = ? `,[ title, content, create_time, blogId])
+
+  console.log('Blog UPDATE success!!')
+  res.status(200).json('Blog UPDATE success!!')
+}
+
+
 
 module.exports = {
   getAllBlog,
   getBlogDetail,
   createBlog,
-  deleteBlog
+  deleteBlog,
+  updateBlog
 }

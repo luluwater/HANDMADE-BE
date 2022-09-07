@@ -38,9 +38,7 @@ const updateComment = async (req,res)=>{
  
   const { commentId, contentInput ,comment_date } = req.body.updateData
 
-  console.log()
-
-  await pool.execute(`UPDATE comment SET content = '${contentInput}', comment_date = '${comment_date}', isEdited = '1' WHERE comment.id = ?`,[commentId])
+  await pool.execute(`UPDATE comment SET content = ?, comment_date = ?, isEdited = '1' WHERE comment.id = ?`,[contentInput , comment_date,commentId])
  
   console.log('success update comment')
   res.send('success update comment')
