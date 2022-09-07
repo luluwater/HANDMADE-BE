@@ -7,7 +7,10 @@ const blogRouter = require('./routes/blog-router')
 const commentRouter = require('./routes/comment-router')
 const replyRouter = require('./routes/reply-router')
 const productRouter = require('./routes/product-router')
-const googleRouter = require('./routes/auth-router')
+const courseRouter = require('./routes/course-router')
+const storeRouter = require('./routes/store-router')
+const userRouter = require('./routes/user-router')
+// const userRouter = require('./routes/user-router')
 
 const PORT = process.env.PORT || 8080
 
@@ -22,7 +25,10 @@ app.use('/api/blog', blogRouter)
 app.use('/api/comment', commentRouter)
 app.use('/api/reply', replyRouter)
 app.use('/api/product', productRouter)
-app.use('/api/google', googleRouter)
+app.use('/api/course', courseRouter)
+app.use('/api/store', storeRouter)
+app.use('/api/user', userRouter)
+// app.use('/api/user', userRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
