@@ -1,10 +1,3 @@
-/**
- * 取出生成的 token 檔案中的
- * 1. Client_id
- * 2. client_secret
- * 3. refresh_token
- */
-
 const axios = require('axios')
 const { generateConfig } = require('./utils')
 const nodemailer = require('nodemailer')
@@ -16,18 +9,13 @@ require('dotenv').config()
 /**
  * 用拿到的 cliend_id 和 client_secret來建立一個新的 OAuth2
  */
-const oAuth2Client = new google.auth.OAuth2(
-  '526215990556-gbgmt6b54f8qqu6g7p3i73fckqi7scsm.apps.googleusercontent.com',
-  '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',
-  'http://localhost:8080/auth/google/redirect'
-)
+const oAuth2Client = new google.auth.OAuth2('', '', '')
 
 /**
  * 並在建立的 oAuth 中設置他的 Credentials，裡面要放入 refresh token
  */
 oAuth2Client.setCredentials({
-  refresh_token:
-    '1//0eynkwkDNRIRICgYIARAAGA4SNwF-L9IrWKHHvJzbPvyjPIkHfAEJOi1FccA1LAXAgroBVW_s7Txun6muDjShPtJoX7g2Ti_qzGs',
+  refresh_token: '',
 })
 
 /**
@@ -61,7 +49,6 @@ async function sendMail(req, res) {
     res.send(error)
   }
 }
-///////////////send//////////////////////////////
 
 // !!下面大專應該不會用到，所以 generateConfig 應該不用寫
 async function getUser(req, res) {
@@ -110,6 +97,5 @@ module.exports = {
   getUser,
   sendMail,
   getDrafts,
-  //   searchMail,
   readMail,
 }
