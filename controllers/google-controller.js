@@ -25,14 +25,15 @@ const auth = {
 
 
 /**
- * 下面有各種對 gmail 操作的方法
+ * 
  * TODO: 傳送 email 需要知道該 auth(我們在 console 裡面選擇的測試 email angus648那個) 大專改成測試的 EMAIL 帳號
  */
+//GET http://localhost:8080/api/google/sendmail
 const sendMail = async (req, res) => {
 
   //TODO:把 GMAIL 和內容放在這
   const mailoptions = {
-    from: 'Siddhant &lt;angusapril648@gmail.com>',
+    from: 'Siddhant &lt;sickmi14798@gmail.com>',
     to: 'angusapril648@gmail.com',
     subject: 'Gmail API NodeJS Success happy!',
   }
