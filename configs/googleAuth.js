@@ -69,7 +69,4 @@ async function authorize() {
   }
   return client
 }
-
-module.exports = {
-  authorize,
-}
+authorize()
