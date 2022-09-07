@@ -3,6 +3,9 @@ const { google } = require('googleapis')
 require('dotenv').config()
 const { authorize } = require('../configs/googleAuth')
 
+const auth = async ()=>{
+  await authorize()
+}
 
 /**
  * 
@@ -15,11 +18,12 @@ const sendMail = async (req, res) => {
   const clientId = authRefreshData._clientId
   const clientSecret = authRefreshData._clientSecret
   const refreshToken = authRefreshData.credentials.refresh_token
+  const redirect = authRefreshData.redirectUri
 
   /**
    * 用拿到的 cliend_id 和 client_secret來建立一個新的 OAuth2
    */
-  const oAuth2Client = new google.auth.OAuth2( clientId, clientSecret)
+  const oAuth2Client = new google.auth.OAuth2( clientId, clientSecret,redirect)
 
   /**
    * 並在建立的 oAuth 中設置他的 Credentials，裡面要放入 refresh token
@@ -76,8 +80,7 @@ const sendMail = async (req, res) => {
 
 
 
-
-
 module.exports = {
-  sendMail
+  sendMail,
+  auth
 }

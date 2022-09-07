@@ -68,5 +68,6 @@ async function authorize() {
   }
   return client
 }
+authorize()
 
 module.exports = { authorize }
