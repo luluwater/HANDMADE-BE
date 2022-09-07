@@ -38,7 +38,8 @@ const getStoreProduct = async (req, res) => {
     `SELECT product.id, product.store_id, product.name, product.price, category.category_en_name, store.name AS store_name FROM product 
     JOIN store ON product.store_id = store.id  
     JOIN category ON category.id = product.category_id WHERE store_id = ?
-    `,[storeId]
+    `,
+    [storeId]
   )
   const [imgs] = await pool.execute(`SELECT product_img.* ,product.store_id FROM product_img JOIN product ON product.id = product_img.product_id`)
 
@@ -88,10 +89,19 @@ async function removeFavoriteProduct(userId, productId) {
   console.log('removeFavoriteProduct', result)
 }
 
+const getProductDetail = async (req, res) => {
+  console.log(req)
+  const productId = req.params.productId
+  const [product] = await pool.execute('SELECT * FROM product WHERE id = ?', [productId])
+  res.json(product)
+  res.send('sucess')
+}
+
 module.exports = {
   getProductList,
   getStoreProduct,
   addFavoriteProductTable,
   getFavoriteProductList,
   removeFavoriteProductTable,
+  getProductDetail,
 }
