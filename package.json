@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "devApi": "nodemon ./configs/googleAuth.js"
+    "devApi": "nodemon ./configs/googleAuth.js",
+    "devTest": "nodemon ./configs/oauthService.js"
   },
   "keywords": [],
   "author": "",

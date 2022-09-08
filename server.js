@@ -10,7 +10,7 @@ const productRouter = require('./routes/product-router')
 const courseRouter = require('./routes/course-router')
 const storeRouter = require('./routes/store-router')
 const userRouter = require('./routes/user-router')
-// const userRouter = require('./routes/user-router')
+const googleRouter = require('./routes/google-router')
 
 const PORT = process.env.PORT || 8080
 
@@ -28,7 +28,7 @@ app.use('/api/product', productRouter)
 app.use('/api/course', courseRouter)
 app.use('/api/store', storeRouter)
 app.use('/api/user', userRouter)
-// app.use('/api/user', userRouter)
+app.use('/api/google', googleRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
