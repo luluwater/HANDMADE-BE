@@ -16,11 +16,6 @@ const getUserProductOrders = async (req, res) => {
   res.json(dataProduct)
 }
 
-// state(user_discount)為結帳時是否使用 0:用 / 1:未用
-// 1. 可使用 : end_date(coupon) > now + state=1 (user_discount)
-// 2. 已失效 : -已失效 end_date(coupon) < now + state=1 (user_discount)
-//             -已使用 state=0 (user_discount)
-
 const getUserCoupons = async (req, res) => {
   const [dataCoupon] = await pool.execute(
     'SELECT user_discount.*, coupon.name AS coupon_name, coupon.discount_code, coupon.start_date, coupon.end_date, coupon_discount, coupon.discount_code FROM user_discount JOIN coupon ON user_discount.coupon_id = coupon.id JOIN user ON user_discount.user_id = user.id WHERE user_discount.user_id = 1'
@@ -29,3 +24,8 @@ const getUserCoupons = async (req, res) => {
   res.json(dataCoupon)
 }
 module.exports = { getUserCourseOrders, getUserProductOrders, getUserCoupons }
+
+// state(user_discount)為結帳時是否使用 0:用 / 1:未用
+// 1. 可使用 : end_date(coupon) > now + state=1 (user_discount)
+// 2. 已失效 : -已失效 end_date(coupon) < now + state=1 (user_discount)
+//             -已使用 state=0 (user_discount)
