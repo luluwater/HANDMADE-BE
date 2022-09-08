@@ -94,7 +94,6 @@ const getProductDetail = async (req, res) => {
   const productId = req.params.productId
   const [product] = await pool.execute('SELECT * FROM product WHERE id = ?', [productId])
   res.json(product)
-  res.send('sucess')
 }
 
 module.exports = {
