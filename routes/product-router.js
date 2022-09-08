@@ -15,6 +15,6 @@ router.get('/', getFavoriteProductList)
 router.post('/:productId', addFavoriteProductTable)
 router.delete('/:productId', removeFavoriteProductTable)
 router.get('/:storeId', getStoreProduct)
-router.get('/:productId', getProductDetail)
+router.get('/detail/:productId', getProductDetail)
 
 module.exports = router

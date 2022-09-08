@@ -28,7 +28,7 @@ const getProductList = async (req, res) => {
     return v
   })
 
-  // console.log(response)
+  console.log(response)
   res.json(response)
 }
 
@@ -90,10 +90,21 @@ async function removeFavoriteProduct(userId, productId) {
 }
 
 const getProductDetail = async (req, res) => {
-  console.log(req)
   const productId = req.params.productId
-  const [product] = await pool.execute('SELECT * FROM product WHERE id = ?', [productId])
-  res.json(product)
+  const [product] = await pool.execute(
+    `SELECT product.id, product.name, product.intro, product.price, product.amount, store.name AS store_name FROM product 
+  JOIN store ON product.store_id = store.id WHERE product.id =? `,
+    [productId]
+  )
+  const [imgs] = await pool.execute(`SELECT * FROM product_img`)
+
+  const response = product.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.product_id === v.id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+    v['img_name'] = newImagsName
+    return v
+  })
+  res.json(response)
 }
 
 module.exports = {

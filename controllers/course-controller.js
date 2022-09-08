@@ -21,7 +21,6 @@ const getStoreCourse = async (req, res) => {
 }
 
 const getCourseDetail = async (req, res) => {
-  console.log(req)
   const courseId = req.params.courseId
   const [course] = await pool.execute('SELECT * FROM course WHERE id = ?', [courseId])
   res.json(course)
