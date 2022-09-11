@@ -22,8 +22,20 @@ const getStoreCourse = async (req, res) => {
 
 const getCourseDetail = async (req, res) => {
   const courseId = req.params.courseId
-  const [course] = await pool.execute('SELECT * FROM course WHERE id = ?', [courseId])
-  res.json(course)
+  const [course] = await pool.execute(
+    `SELECT course.id, course.name, course.intro, course.price, course.amount, course.course_date, course.course_time, course.note, store.name AS store_name FROM course 
+  JOIN store ON course.store_id = store.id WHERE course.id =? `,
+    [courseId]
+  )
+  const [imgs] = await pool.execute(`SELECT * FROM course_img`)
+
+  const response = course.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.course_id === v.id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+    v['img_name'] = newImagsName
+    return v
+  })
+  res.json(response)
 }
 
 module.exports = { getStoreCourse, getCourseDetail }

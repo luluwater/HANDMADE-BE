@@ -28,7 +28,7 @@ const getProductList = async (req, res) => {
     return v
   })
 
-  console.log(response)
+  // console.log(response)
   res.json(response)
 }
 
@@ -62,7 +62,7 @@ const getFavoriteProductList = async (req, res) => {
 
 const addFavoriteProductTable = async (req, res) => {
   //TODO: 參數更改session
-  console.log(req.body)
+  // console.log(req.body)
 
   await addFavoriteProduct(1, req.body.productId)
   res.json({ message: '加入最愛' })
@@ -76,7 +76,7 @@ const removeFavoriteProductTable = async (req, res) => {
 
 async function addFavoriteProduct(userId, productId) {
   let [result] = await pool.execute('INSERT INTO user_favorite_product (user_id, product_id) VALUES (?, ?)', [userId, productId])
-  console.log('addFavoriteProduct', result)
+  // console.log('addFavoriteProduct', result)
 }
 
 async function getFavoriteProduct(userId) {
@@ -86,9 +86,10 @@ async function getFavoriteProduct(userId) {
 
 async function removeFavoriteProduct(userId, productId) {
   let [result] = await pool.execute('DELETE FROM user_favorite_product WHERE user_id = ? AND product_id = ?', [userId, productId])
-  console.log('removeFavoriteProduct', result)
+  // console.log('removeFavoriteProduct', result)
 }
 
+////////// Product Detail //////////
 const getProductDetail = async (req, res) => {
   const productId = req.params.productId
   const [product] = await pool.execute(
@@ -107,6 +108,17 @@ const getProductDetail = async (req, res) => {
   res.json(response)
 }
 
+////////// Product Comment //////////
+const getProductComment = async (req, res) => {
+  const productCommentId = req.params.productCommentId
+  const [productComment] = await pool.execute(
+    `SELECT product_comment.*, user.name AS user_name FROM product_comment
+  JOIN user ON product_comment.user_id = user.id WHERE product_id = ?`,
+    [productCommentId]
+  )
+  res.json(productComment)
+}
+
 module.exports = {
   getProductList,
   getStoreProduct,
@@ -114,4 +126,5 @@ module.exports = {
   getFavoriteProductList,
   removeFavoriteProductTable,
   getProductDetail,
+  getProductComment,
 }
