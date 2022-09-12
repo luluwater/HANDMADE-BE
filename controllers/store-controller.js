@@ -43,4 +43,10 @@ const getStoreDetail = async (req, res) => {
   res.json(courseDetail)
 }
 
-module.exports = { getStore, getStoreDetail }
+const getSelect = async (req, res) => {
+  let result = await pool.execute(`SELECT store.name, store.category_id , category.*, category.id AS category_id FROM category JOIN store ON store.category_id = category_id`)
+
+  res.json(result)
+}
+
+module.exports = { getStore, getStoreDetail, getSelect }
