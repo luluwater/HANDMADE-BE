@@ -76,7 +76,7 @@ const removeFavoriteProductTable = async (req, res) => {
 
 async function addFavoriteProduct(userId, productId) {
   let [result] = await pool.execute('INSERT INTO user_favorite_product (user_id, product_id) VALUES (?, ?)', [userId, productId])
-  // console.log('addFavoriteProduct', result)
+  console.log('addFavoriteProduct', result)
 }
 
 async function getFavoriteProduct(userId) {
@@ -86,15 +86,16 @@ async function getFavoriteProduct(userId) {
 
 async function removeFavoriteProduct(userId, productId) {
   let [result] = await pool.execute('DELETE FROM user_favorite_product WHERE user_id = ? AND product_id = ?', [userId, productId])
-  // console.log('removeFavoriteProduct', result)
+  console.log('removeFavoriteProduct', result)
 }
 
 ////////// Product Detail //////////
 const getProductDetail = async (req, res) => {
   const productId = req.params.productId
   const [product] = await pool.execute(
-    `SELECT product.id, product.name, product.intro, product.price, product.amount, store.name AS store_name FROM product 
-  JOIN store ON product.store_id = store.id WHERE product.id =? `,
+    `SELECT product.id, product.name, product.intro, product.price, product.amount, product.store_id, category.category_en_name, store.name AS store_name FROM product 
+    JOIN category ON category.id = product.category_id
+    JOIN store ON product.store_id = store.id WHERE product.id =? `,
     [productId]
   )
   const [imgs] = await pool.execute(`SELECT * FROM product_img`)
@@ -116,7 +117,15 @@ const getProductComment = async (req, res) => {
   JOIN user ON product_comment.user_id = user.id WHERE product_id = ?`,
     [productCommentId]
   )
-  res.json(productComment)
+  const [imgs] = await pool.execute(`SELECT * FROM product_comment_img`)
+
+  const response = productComment.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.id === v.product_comment_img_id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+    v['img_name'] = newImagsName
+    return v
+  })
+  res.json(response)
 }
 
 module.exports = {
