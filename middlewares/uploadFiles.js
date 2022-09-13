@@ -12,8 +12,8 @@ var storage = multer.diskStorage({
   filename: function (req, file, cb) {
     let ext = file.originalname.split('.')
     ext = ext[ext.length - 1]
-    //用日期來給檔案名稱
-    cb(null, `${uuidv4()}.${ext}`)
+    //TODO: 如果要擴充再看看如何使用
+    cb(null, `blog_${uuidv4()}.${ext}`)
   },
 })
 const upload = multer({ storage })

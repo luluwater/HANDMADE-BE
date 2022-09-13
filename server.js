@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const path = require('path')
-const { upload, imagePush } = require('./middlewares/uploadFiles')
+const { upload } = require('./middlewares/uploadFiles')
 
 const chatRouter = require('./routes/chat-router')
 const blogRouter = require('./routes/blog-router')
@@ -33,14 +33,6 @@ app.use('/api/course', courseRouter)
 app.use('/api/store', storeRouter)
 app.use('/api/user', userRouter)
 app.use('/api/google', googleRouter)
-
-app.post('/api/upload_files', (req, res) => {
-  console.log('imageeeeeee', imagePush)
-  if (req.files.length > 0) {
-    res.json(req.files[0])
-    console.log(res.json(req.files[0]))
-  }
-})
 
 app.get('/', (req, res) => {
   res.send('homepage')

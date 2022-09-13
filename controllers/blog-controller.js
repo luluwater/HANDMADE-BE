@@ -1,11 +1,21 @@
 const pool = require('../configs/mysql')
+const { v4: uuidv4 } = require('uuid')
 
 //get http://localhost:8080/api/blog
 const getAllBlog = async (req, res) => {
-  let [data] = await pool.execute(
+  let [blogs] = await pool.execute(
     'SELECT blog.*, category.category_name, user.*, blog.id AS blog_id FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id WHERE blog.valid = 1  ORDER BY blog.create_time DESC'
   )
-  res.json(data)
+
+  let [tags] = await pool.execute('SELECT tags.* FROM tags')
+  let [blogImgs] = await pool.execute('SELECT blog_img.* FROM blog_img')
+
+  for (let i = 0; i < blogs.length; i++) {
+    blogs[i].tags = tags.filter((tag) => tag.blog_id === blogs[i].blog_id)
+    blogs[i].img_url = blogImgs.filter((img) => img.blog_id === blogs[i].blog_id)
+  }
+
+  res.json(blogs)
 }
 
 //get http://localhost:8080/api/blog/:blogId
@@ -23,8 +33,7 @@ const getBlogDetail = async (req, res) => {
   )
 
   let [tags] = await pool.execute('SELECT tags.* FROM tags WHERE tags.blog_id = ?', [blogId])
-
-  blog[0].tags = tags
+  if (tags.length > 0) blog[0].tags = tags
 
   res.json({
     comment: {
@@ -38,9 +47,6 @@ const getBlogDetail = async (req, res) => {
 const createBlog = async (req, res) => {
   const { id, user_id, title, content, category_id, store_id, create_time, tags } = req.body
 
-  // console.log(req.body)
-  // console.log(tags)
-
   await pool.execute(`INSERT IGNORE INTO blog (id, user_id, title, content, category_id ,store_id, create_time , valid) VALUES (?, ?, ?, ? , ? , ? , ? ,1)`, [
     id,
     user_id,
@@ -52,7 +58,7 @@ const createBlog = async (req, res) => {
   ])
 
   await tags.forEach((tag) => {
-    pool.execute(`INSERT IGNORE INTO tags (id, blog_id, tag_name) VALUES (?, ?, ?)`, [tag.id, tag.blog_id, tag.tag_name])
+    pool.execute(`INSERT IGNORE INTO tags (id, blog_id, tag_name) VALUES (?, ?, ?)`, [tag.tagId, tag.blog_id, tag.tag_name])
   })
 
   console.log('Blog created success!!')
@@ -83,10 +89,23 @@ const updateBlog = async (req, res) => {
   res.status(200).json('Blog UPDATE success!!')
 }
 
+const uploadBlogImg = async (req, res) => {
+  if (req.files.length > 0) {
+    const imgUrl = await req.files[0].filename
+    const blogId = req.params.blogId
+    const id = uuidv4()
+
+    await pool.execute('INSERT IGNORE INTO blog_img (id, img_name, blog_id) VALUES (? , ? , ?)', [id, imgUrl, blogId])
+
+    res.json(req.files[0])
+  }
+}
+
 module.exports = {
   getAllBlog,
   getBlogDetail,
   createBlog,
   deleteBlog,
   updateBlog,
+  uploadBlogImg,
 }
