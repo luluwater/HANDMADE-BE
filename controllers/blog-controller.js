@@ -90,15 +90,16 @@ const updateBlog = async (req, res) => {
 }
 
 const uploadBlogImg = async (req, res) => {
-  if (req.files.length > 0) {
-    const imgUrl = await req.files[0].filename
-    const blogId = req.params.blogId
-    const id = uuidv4()
+  if (req.files.length <= 0) return
 
-    await pool.execute('INSERT IGNORE INTO blog_img (id, img_name, blog_id) VALUES (? , ? , ?)', [id, imgUrl, blogId])
+  const id = uuidv4()
+  const imgUrl = await req.files[0].filename
+  const blogId = req.params.blogId
 
-    res.json(req.files[0])
-  }
+  await pool.execute('INSERT IGNORE INTO blog_img (id, img_name, blog_id) VALUES (? , ? , ?)', [id, imgUrl, blogId])
+
+  console.log('success')
+  res.json(req.files[0])
 }
 
 module.exports = {
