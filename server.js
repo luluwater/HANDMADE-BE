@@ -1,18 +1,31 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-require('dotenv').config()
-
+const app = express()
+const path = require('path')
 const chatRouter = require('./routes/chat-router')
 const blogRouter = require('./routes/blog-router')
-//Login
-const Login = require('./routes/Login')
 
+// Login
+const Login = require('./routes/Login')
+// SignUp
+const SignUp = require('./routes/SignUp')
 const PORT = process.env.PORT || 8080
 
-const expressSession = require('express-session');
+const corsOptions = {
+  // 如果要讓 cookie 可以跨網域存取，這邊要設定 credentials
+  // 且 origin 也要設定
+  credentials: true,
+  origin: ['http://localhost:3000'],
+}
+app.use(cors(corsOptions))
+app.use(express.json())
+
+const expressSession = require('express-session')
+const { response } = require('express')
 // 把 session 存在硬碟中
-var FileStore = require('session-file-store')(expressSession);
+var FileStore = require('session-file-store')(expressSession)
 app.use(
   expressSession({
     store: new FileStore({
@@ -25,25 +38,26 @@ app.use(
     // 還沒初始化的，要不要存
     saveUninitialized: false,
   })
-);
-
-
-
-const app = express()
-
+)
+//login 
+app.get('/api',(req,res,next)=>{
+  response('err')
+})
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/api/chat', chatRouter)
 app.use('/api/blog', blogRouter)
-//Login
+
 app.use('/api/Login', Login)
+app.use('/api/SignUp', SignUp)
 
 app.get('/', (req, res) => {
   res.send('homepage')
 })
 
+// server running
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`)
 })
