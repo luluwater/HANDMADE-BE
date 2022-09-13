@@ -20,11 +20,13 @@ const getStoreCourse = async (req, res) => {
   res.json(reaponse)
 }
 
+////////// Course Detail //////////
 const getCourseDetail = async (req, res) => {
   const courseId = req.params.courseId
   const [course] = await pool.execute(
-    `SELECT course.id, course.name, course.intro, course.price, course.amount, course.course_date, course.course_time, course.note, store.name AS store_name FROM course 
-  JOIN store ON course.store_id = store.id WHERE course.id =? `,
+    `SELECT course.id, course.name, course.intro, course.price, course.amount, course.course_date, course.course_time, course.note, category.category_en_name, store.address, store.route, store.name AS store_name FROM course 
+    JOIN category ON category.id = course.category_id
+    JOIN store ON course.store_id = store.id WHERE course.id =? `,
     [courseId]
   )
   const [imgs] = await pool.execute(`SELECT * FROM course_img`)
@@ -38,4 +40,22 @@ const getCourseDetail = async (req, res) => {
   res.json(response)
 }
 
-module.exports = { getStoreCourse, getCourseDetail }
+////////// Course Comment //////////
+const getCourseComment = async (req, res) => {
+  const courseCommentId = req.params.courseCommentId
+  const [courseComment] = await pool.execute(
+    `SELECT course_comment.*, user.name AS user_name FROM course_comment JOIN user ON course_comment.user_id = user.id WHERE course_id = ?`,
+    [courseCommentId]
+  )
+  const [imgs] = await pool.execute(`SELECT * FROM course_comment_img`)
+
+  const response = courseComment.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.id === v.course_comment_img_id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+    v['img_name'] = newImagsName
+    return v
+  })
+  res.json(response)
+}
+
+module.exports = { getStoreCourse, getCourseDetail, getCourseComment }
