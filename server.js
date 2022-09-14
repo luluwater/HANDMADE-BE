@@ -7,7 +7,6 @@ const http = require('http')
 const { Server } = require('socket.io')
 
 const chatRouter = require('./routes/chat-router')
-const blogRouter = require('./routes/blog-router')
 
 
 const PORT = process.env.PORT || 8080
@@ -27,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
 
 // socket 開始
 /**
@@ -60,7 +60,6 @@ io.of('/admin').on('connection', socket=>{
 
 
 app.use('/api/chat', chatRouter)
-app.use('/api/blog', blogRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
