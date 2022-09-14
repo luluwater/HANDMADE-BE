@@ -1,8 +1,9 @@
+/* eslint-disable prettier/prettier */
 const express = require('express')
 const router = express.Router()
-const pool = require('../utils/db')
+const pool = require('../configs/mysql')
 const argon2 = require('argon2')
-const date = require('date-and-time')
+// const date = require('date-and-time')
 const { body, validationResult } = require('express-validator')
 
 const reqistetRules = [
@@ -24,15 +25,15 @@ router.post('/', reqistetRules, async (req, res) => {
     return res.status(400).json({ errors: validateResult.array() })
   }
   //檢查Email有沒有重複
-  let [user] = await pool.execute('SELECT * FROM users WHERE email= ?', [req.body.email])
+  let [user] = await pool.execute('SELECT * FROM user WHERE email= ?', [req.body.email])
   //如果從資料庫撈出來的Email大於0 代表有註冊過
   if (user.length > 0) {
     return res.status(400).json({ message: '這個email已經註冊過' })
   }
   let hashPassword = await argon2.hash(req.body.password, 10)
   //取得註冊日期
-  const now = new Date()
-  let creatTime = date.format(now, 'YYYY/MM/DD')
+  // const now = new Date()
+  // let creatTime = date.format(now, 'YYYY/MM/DD')
   //寫進資料庫
   await pool.execute('INSERT INTO users (name,email,password,create_time) VALUES(?,?,?,?)', [req.body.name, req.body.email, hashPassword, creatTime])
   //回應前端
