@@ -1,9 +1,7 @@
 const pool = require('../configs/mysql')
 
 const getChatRoom = async (req, res) => {
-  let [data] = await pool.execute(
-    'SELECT namespace.*, rooms.*,  message.*, namespace.id AS  namespace_id,rooms.id AD  FROM namespace JOIN rooms ON rooms.namespace_id = namespace.id JOIN message ON message.room_id = rooms.id'
-  )
+  let [data] = await pool.execute('SELECT rooms.*, message.*, rooms.id AS rooms_id FROM rooms JOIN message ON rooms.rooms_id = message.room_id')
   res.json(data)
 }
 

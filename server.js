@@ -32,13 +32,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, 'public')))
 app.use(upload.array('files'))
 
 // socket 開始
 /**
  * namesSpace 很像 endpoint，但不是真正的 endpoint
- * 可以透過不同的 namespace　來創建不同的　room
+ * 可以透過不同的 namespace來創建不同的room
  * join and leaving
  */
 io.on('connection', (socket) => {
