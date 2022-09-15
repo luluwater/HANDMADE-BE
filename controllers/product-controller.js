@@ -4,7 +4,7 @@ const pool = require('../configs/mysql')
 
 const getProductList = async (req, res) => {
   const data = await pool.execute(
-    `SELECT product.id, product.name, category.category_name,category.category_en_name, store.name AS store_name, price FROM product 
+    `SELECT product.id, product.name, product.amount, category.category_name,category.category_en_name, store.name AS store_name, price FROM product 
     JOIN store ON product.store_id = store.id  
     JOIN category ON category.id = product.category_id
     `
@@ -93,7 +93,7 @@ async function removeFavoriteProduct(userId, productId) {
 const getProductDetail = async (req, res) => {
   const productId = req.params.productId
   const [product] = await pool.execute(
-    `SELECT product.id, product.name, product.intro, product.price, product.amount, product.store_id, category.category_en_name, store.name AS store_name FROM product 
+    `SELECT product.id, product.name, product.amount, product.intro, product.price, product.amount, product.store_id, category.category_en_name, store.name AS store_name FROM product 
     JOIN category ON category.id = product.category_id
     JOIN store ON product.store_id = store.id WHERE product.id =? `,
     [productId]
