@@ -47,8 +47,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/api/chat', chatRouter)
 app.use('/api/blog', blogRouter)
 
-app.use('/api/Login', Login)
-app.use('/api/SignUp', SignUp)
+app.use('/api/auth', Login)
+// app.use('/api/SignUp', SignUp)
 
 app.get('/', (req, res) => {
   res.send('homepage')
