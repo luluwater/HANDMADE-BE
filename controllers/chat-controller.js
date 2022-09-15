@@ -9,7 +9,7 @@ const getChatRoom = async (req, res) => {
     rooms[i].msg = msg.filter((m) => m.room_id === rooms[i].id)
   }
 
-  res.json(rooms)
+  return rooms
 }
 
 const sendChatMessage = async (req, res) => {
@@ -22,6 +22,7 @@ const sendChatMessage = async (req, res) => {
   console.log('INSERT chatMsg success')
   res.send('INSERT chatMsg success')
 }
+
 
 module.exports = {
   getChatRoom,
