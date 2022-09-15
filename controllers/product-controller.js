@@ -4,7 +4,7 @@ const pool = require('../configs/mysql')
 
 const getProductList = async (req, res) => {
   const data = await pool.execute(
-    `SELECT product.id, product.name, category.category_name,category.category_en_name, store.name AS store_name, price,sold_amount FROM product 
+    `SELECT product.id, product.name,product.store_id,product.category_id, category.category_name,category.category_en_name, store.name AS store_name, price,sold_amount FROM product 
     JOIN store ON product.store_id = store.id  
     JOIN category ON category.id = product.category_id
     WHERE isDelete = 0
@@ -65,7 +65,7 @@ const addFavoriteProductTable = async (req, res) => {
   //TODO: 參數更改session
   console.log(req.body)
 
-  await addFavoriteProduct(1, req.body.productId)
+  await addFavoriteProduct(1, req.body.productId, req.body.storeId, req.body.categoryId)
   res.json({ message: '加入最愛' })
 }
 
@@ -75,8 +75,8 @@ const removeFavoriteProductTable = async (req, res) => {
   res.json({ message: '移出最愛' })
 }
 
-async function addFavoriteProduct(userId, productId) {
-  let [result] = await pool.execute('INSERT INTO user_favorite_product (user_id, product_id) VALUES (?, ?)', [userId, productId])
+async function addFavoriteProduct(userId, productId, storeId, categoryId) {
+  let [result] = await pool.execute('INSERT INTO user_favorite_product (user_id, product_id,store_id,category_id) VALUES (?, ?, ?, ?)', [userId, productId, storeId, categoryId])
   console.log('addFavoriteProduct', result)
 }
 
