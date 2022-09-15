@@ -22,11 +22,11 @@ const userLikesCourse = async (req, res) => {
   res.json(dataCourse)
 }
 
-//課程收藏
+//商品收藏
 const userLikesProduct = async (req, res) => {
   // const product_id = req.params.productId
   const data = await pool.execute(
-    'SELECT user_favorite_product.*, category.category_en_name, product.store_id, store.name AS store_name, product.name AS product_name, product.price FROM user_favorite_product JOIN user ON user_favorite_product.user_id = user.id JOIN category ON user_favorite_product.category_id = category.id JOIN product ON user_favorite_product.product_id = product.id JOIN store ON user_favorite_product.store_id = store.id WHERE user.id = 30'
+    'SELECT user_favorite_product.*, category.category_en_name, product.store_id, store.name AS store_name, product.name AS product_name, product.price FROM user_favorite_product JOIN user ON user_favorite_product.user_id = user.id JOIN category ON user_favorite_product.category_id = category.id JOIN product ON user_favorite_product.product_id = product.id JOIN store ON user_favorite_product.store_id = store.id WHERE user.id = 1'
   )
   const productImgs = await pool.execute(`SELECT * FROM product_img`)
   const dataProductDetail = data[0].map((v) => {

@@ -11,7 +11,7 @@ const getUserAccount = async (req, res) => {
 //   await pool.execute(`UPDATE user SET (password, name,  phone, birthday, address) VALUES (?, ?, ?, ?, ?), [password, name,  phone, birthday, address] WHERE user.id = 1`)
 
 // res.send('success update')
-//WHERE user.id = 1
+// WHERE user.id = 1
 // module.exports = {  getUserAccount, updateUserAccount }
 
 module.exports = { getUserAccount }
