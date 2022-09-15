@@ -32,8 +32,8 @@ router.post('/login', async (req, res, next) => {
 })
 
 // logout
-// router.get('/logout', async (req, res, next) => {
-//   req.session.user = null
-//   res.json({ message: ' 登出成功' })
-// })
+router.get('/logout', async (req, res, next) => {
+  req.session.user = null
+  res.json({ message: ' 登出成功' })
+})
 module.exports = router
