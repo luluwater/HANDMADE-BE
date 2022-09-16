@@ -3,7 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express()
-const path = require('path');
+const path = require('path')
 // const path = require('path')
 const chatRouter = require('./routes/chat-router')
 const blogRouter = require('./routes/blog-router')
@@ -27,7 +27,6 @@ app.use(express.json())
 const expressSession = require('express-session')
 var FileStore = require('session-file-store')(expressSession)
 
-
 app.use(
   expressSession({
     store: new FileStore({
@@ -38,7 +37,6 @@ app.use(
     saveUninitialized: false,
   })
 )
-
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -53,7 +51,6 @@ app.use('/api/course', courseRouter)
 app.use('/api/store', storeRouter)
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
-
 
 app.get('/', (req, res) => {
   res.send('homepage')
