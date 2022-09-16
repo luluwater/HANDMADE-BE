@@ -3,7 +3,6 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const path = require('path')
 const { upload } = require('./middlewares/uploadFiles')
-const { getChatRoom } = require('./controllers/chat-controller')
 
 const pool = require('./configs/mysql')
 
