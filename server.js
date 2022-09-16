@@ -16,6 +16,7 @@ const courseRouter = require('./routes/course-router')
 const storeRouter = require('./routes/store-router')
 const userRouter = require('./routes/user-router')
 const googleRouter = require('./routes/google-router')
+const filterRouter = require('./routes/filter-router')
 const http = require('http')
 const { Server } = require('socket.io')
 
@@ -65,6 +66,7 @@ app.use('/api/course', courseRouter)
 app.use('/api/store', storeRouter)
 app.use('/api/user', userRouter)
 app.use('/api/google', googleRouter)
+app.use('/api/filter', filterRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')

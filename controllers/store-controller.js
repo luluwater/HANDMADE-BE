@@ -43,11 +43,4 @@ const getStoreDetail = async (req, res) => {
   res.json(courseDetail)
 }
 
-const getSelect = async (req, res) => {
-  const [store] = await pool.execute(`SELECT store.* FROM store`)
-  const [category] = await pool.execute('SELECT category.* FROM category')
-
-  res.json({ store: store, category: category })
-}
-
-module.exports = { getStore, getStoreDetail, getSelect }
+module.exports = { getStore, getStoreDetail }

@@ -58,6 +58,7 @@ const createBlog = async (req, res) => {
   ])
 
   await tags.forEach((tag) => {
+    console.log(tag)
     pool.execute(`INSERT IGNORE INTO tags (id, blog_id, tag_name) VALUES (?, ?, ?)`, [tag.tagId, tag.blog_id, tag.tag_name])
   })
 
