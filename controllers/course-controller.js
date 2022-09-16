@@ -24,13 +24,13 @@ const getStoreCourse = async (req, res) => {
 const getCourseDetail = async (req, res) => {
   const courseId = req.params.courseId
   const [course] = await pool.execute(
-    `SELECT course.id, course.name, course.store_id, course.amount, course.intro, course.price, course.amount, course.course_date, course.course_time, course.note, category.category_en_name, store.address, store.route, store.name AS store_name FROM course 
+    `SELECT course.id, course.name, course.store_id, course.amount, course.intro, course.price, course.amount, course.course_date, course.course_time, course.note, course.category, category.category_en_name, store.address, store.route, store.name AS store_name FROM course 
     JOIN category ON category.id = course.category_id
     JOIN store ON course.store_id = store.id WHERE course.id =? `,
     [courseId]
   )
   const [imgs] = await pool.execute(`SELECT * FROM course_img`)
-  const [stocks] = await pool.execute(`SELECT * FROM course_stock`)
+  const [stocks] = await pool.execute(`SELECT * FROM course_stock WHERE course_stock.stock != "0"`)
 
   const response = course.map((v) => {
     const newImgs = imgs.filter((v2) => v2.course_id === v.id)

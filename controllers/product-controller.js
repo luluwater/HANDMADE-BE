@@ -93,17 +93,22 @@ async function removeFavoriteProduct(userId, productId) {
 const getProductDetail = async (req, res) => {
   const productId = req.params.productId
   const [product] = await pool.execute(
-    `SELECT product.id, product.name, product.amount, product.intro, product.price, product.amount, product.store_id, category.category_en_name, store.name AS store_name FROM product 
+    `SELECT product.id, product.category_id, product.name, product.amount, product.intro, product.price, product.amount, product.store_id, category.category_en_name, store.name AS store_name FROM product 
     JOIN category ON category.id = product.category_id
     JOIN store ON product.store_id = store.id WHERE product.id =? `,
     [productId]
   )
   const [imgs] = await pool.execute(`SELECT * FROM product_img`)
+  const favorite = await getFavoriteProduct(1)
 
   const response = product.map((v) => {
     const newImgs = imgs.filter((v2) => v2.product_id === v.id)
     const newImagsName = newImgs.map((v2) => v2.img_name)
+    const isFavorite = favorite.find((v2) => v2.product_id === v.id)
+
     v['img_name'] = newImagsName
+    v['isFavorite'] = isFavorite ? true : false
+
     return v
   })
   res.json(response)
