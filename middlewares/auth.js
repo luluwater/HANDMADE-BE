@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-let checkLogin = function (req, res, next) {
+const checkLogin =  (req, res, next) => {
   // 判斷這個人是否已經登入？
   // session 裡如果沒有 member 這個資料，表示沒有登入過
   if (!req.session.user) {
@@ -8,5 +7,6 @@ let checkLogin = function (req, res, next) {
   }
   next()
 }
+
 
 module.exports = { checkLogin }
