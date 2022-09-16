@@ -44,9 +44,10 @@ const getStoreDetail = async (req, res) => {
 }
 
 const getSelect = async (req, res) => {
-  let result = await pool.execute(`SELECT store.name, store.category_id , category.*, category.id AS category_id FROM category JOIN store ON store.category_id = category_id`)
+  const [store] = await pool.execute(`SELECT store.* FROM store`)
+  const [category] = await pool.execute('SELECT category.* FROM category')
 
-  res.json(result)
+  res.json({ store: store, category: category })
 }
 
 module.exports = { getStore, getStoreDetail, getSelect }
