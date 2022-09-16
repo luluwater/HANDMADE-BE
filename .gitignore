@@ -27,5 +27,4 @@ yarn-error.log*
 /credentials.json
 /token.json
 
-sessions
 
