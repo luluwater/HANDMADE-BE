@@ -71,6 +71,7 @@ const addFavoriteProductTable = async (req, res) => {
 
 const removeFavoriteProductTable = async (req, res) => {
   //TODO: 參數更改session
+  console.log('req', req.body.productId)
   await removeFavoriteProduct(1, req.body.productId)
   res.json({ message: '移出最愛' })
 }
@@ -91,7 +92,7 @@ async function removeFavoriteProduct(userId, productId) {
 }
 
 const getProductDetail = async (req, res) => {
-  console.log(req)
+  console.log('test', req)
   const productId = req.params.productId
   const [product] = await pool.execute('SELECT * FROM product WHERE id = ?', [productId])
   res.json(product)
