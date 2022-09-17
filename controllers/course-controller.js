@@ -24,7 +24,7 @@ const getStoreCourse = async (req, res) => {
 const getCourseDetail = async (req, res) => {
   const courseId = req.params.courseId
   const [course] = await pool.execute(
-    `SELECT course.id, course.name, course.store_id, course.amount, course.intro, course.price, course.amount, course.course_date, course.course_time, course.note, course.category, category.category_en_name, store.address, store.route, store.name AS store_name FROM course 
+    `SELECT course.id, course.name, course.store_id, course.amount, course.intro, course.price, course.amount, course.course_date, course.course_time, course.note, course.category_id, category.category_en_name, store.address, store.route, store.name AS store_name FROM course 
     JOIN category ON category.id = course.category_id
     JOIN store ON course.store_id = store.id WHERE course.id =? `,
     [courseId]
