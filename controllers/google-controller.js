@@ -33,6 +33,7 @@ let event = {
 
 //TODO: 插不進去喇
 //!0908 目前是 enjoy project 的 網路用戶端 3
+//GET http://localhost:8080/api/google/calendar
 const addToSchedule = async (req, res) => {
   const authRefreshData = await authorize()
   const clientId = authRefreshData._clientId
@@ -128,7 +129,7 @@ const sendMail = async (req, res) => {
      */
     const mailOptions = {
       ...mailoptions,
-      text: 'The Gmail API with NodeJS works 成功成功了好爽歐',
+      text: 'The Gmail API with NodeJS works',
     }
 
     const result = await transport.sendMail(mailOptions)
