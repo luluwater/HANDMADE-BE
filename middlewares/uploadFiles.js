@@ -1,21 +1,21 @@
 const multer = require('multer')
 const { v4: uuidv4 } = require('uuid')
 
-/**
- * imgae
- */
+const fileName = (req, file, cb) => {
+  const isAvatar = file.originalname.includes('profile')
 
-var storage = multer.diskStorage({
+  let ext = file.originalname.match(/\..*$/)[0]
+
+  isAvatar ? cb(null, `user_${uuidv4()}.${ext}`) : cb(null, `blog_${uuidv4()}.${ext}`)
+}
+
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/')
   },
-  filename: function (req, file, cb) {
-    let ext = file.originalname.split('.')
-    ext = ext[ext.length - 1]
-    //TODO: 如果要擴充再看看如何使用
-    cb(null, `blog_${uuidv4()}.${ext}`)
-  },
+  filename: fileName,
 })
+
 const upload = multer({ storage })
 
 module.exports = { upload }

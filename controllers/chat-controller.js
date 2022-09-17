@@ -1,7 +1,7 @@
 const pool = require('../configs/mysql')
 
 // TODO: isPrivate 加入
-const getChatRoom = async (req, res) => {
+const getChatRoom = async () => {
   let [rooms] = await pool.execute('SELECT rooms.* FROM rooms')
   let [msg] = await pool.execute('SELECT message.*,user.* FROM message JOIN user ON message.user_id = user.id')
 
@@ -22,7 +22,6 @@ const sendChatMessage = async (req, res) => {
   console.log('INSERT chatMsg success')
   res.send('INSERT chatMsg success')
 }
-
 
 module.exports = {
   getChatRoom,
