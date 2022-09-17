@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const { getUserAccount } = require('../controllers/user-account-controller')
+const { getGirlCoupon } = require('../controllers/user-news-controller')
 const {
   getUserCourseOrders,
   getUserCourseOrderDetails,
@@ -32,5 +33,7 @@ router.get('/coupons', getUserCoupons)
 router.get('/likes-course', userLikesCourse)
 router.get('/likes-product', userLikesProduct)
 router.get('/likes-blog', userLikesBLog)
+
+router.post('/get-coupon', getGirlCoupon)
 
 module.exports = router
