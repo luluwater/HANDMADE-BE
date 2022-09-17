@@ -54,6 +54,9 @@ io.on('connection', async (socket) => {
 
   socket.emit('rooms', rooms)
   socket.emit('messageToClient', { welcome: 'wlecome' })
+  socket.on('joinRoom', (currentRoom) => {
+    console.log(currentRoom)
+  })
 })
 
 // app.use('/api/chat', chatRouter)
@@ -71,8 +74,6 @@ app.get('/', (req, res) => {
   res.send('homepage')
 })
 
-server.listen(8000, console.log(`webSocket has successfully Start at: ${8000}`))
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`node Server is running on http://localhost:${PORT}`)
 })
