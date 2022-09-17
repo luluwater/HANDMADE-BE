@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid')
 //get http://localhost:8080/api/blog
 const getAllBlog = async (req, res) => {
   let [blogs] = await pool.execute(
-    'SELECT blog.*, category.category_name, user.*, blog.id AS blog_id FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id WHERE blog.valid = 1  ORDER BY blog.create_time DESC'
+    'SELECT blog.*, category.category_name, user.*, store.id, store.name, store.img_url, blog.id AS blog_id,store.name AS store_name, blog.create_time AS blog_create_time FROM blog JOIN category ON blog.category_id = category.id JOIN user ON blog.user_id = user.id JOIN store ON store.id = blog.store_id WHERE blog.valid = 1  ORDER BY blog.create_time DESC'
   )
 
   let [tags] = await pool.execute('SELECT tags.* FROM tags')
