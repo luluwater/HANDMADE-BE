@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
   res.send('homepage')
 })
 
-// server.listen(8000, console.log(`webSocket has successfully Start at: ${8000}`))
+server.listen(8000, console.log(`webSocket has successfully Start at: ${8000}`))
 
 app.listen(PORT, () => {
   console.log(`node Server is running on http://localhost:${PORT}`)
