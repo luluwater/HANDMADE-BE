@@ -13,11 +13,10 @@ const courseRouter = require('./routes/course-router')
 const storeRouter = require('./routes/store-router')
 const userRouter = require('./routes/user-router')
 const googleRouter = require('./routes/google-router')
-
-
 const PORT = process.env.PORT || 8080
-
 const app = express()
+
+const http = require('http')
 
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -36,11 +35,16 @@ app.use('/api/store', storeRouter)
 app.use('/api/user', userRouter)
 app.use('/api/google', googleRouter)
 
+const server = http.createServer(app)
+
+const SocketServer = require('./configs/socket')
+SocketServer(server)
+
 app.get('/', (req, res) => {
   res.send('homepage')
 })
 
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`node Server is running on http://localhost:${PORT}`)
 })

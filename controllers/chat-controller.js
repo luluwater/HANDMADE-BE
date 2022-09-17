@@ -9,7 +9,7 @@ const getChatRoom = async (req, res) => {
     rooms[i].msg = msg.filter((m) => m.room_id === rooms[i].id)
   }
 
-  return rooms
+  res.json(rooms) 
 }
 
 const sendChatMessage = async (req, res) => {
