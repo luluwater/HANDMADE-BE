@@ -1,6 +1,9 @@
 const router = require('express').Router()
-const { authorize } = require('../configs/googleAuth')
+const { login, logout, register } = require('../controllers/auth-cotroller')
+const { registerRules } = require('../middlewares/auth')
 
-router.get('/auth', authorize)
+router.post('/login', login)
+router.post('/logout', logout)
+router.post('/register', registerRules, register)
 
 module.exports = router

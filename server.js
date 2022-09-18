@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -6,7 +7,8 @@ const { upload } = require('./middlewares/uploadFiles')
 
 const pool = require('./configs/mysql')
 
-// const chatRouter = require('./routes/chat-router')
+const app = express()
+const chatRouter = require('./routes/chat-router')
 const blogRouter = require('./routes/blog-router')
 const commentRouter = require('./routes/comment-router')
 const replyRouter = require('./routes/reply-router')
@@ -18,10 +20,30 @@ const googleRouter = require('./routes/google-router')
 const filterRouter = require('./routes/filter-router')
 const http = require('http')
 const { Server } = require('socket.io')
+const authRouter = require('./routes/auth-router')
 
 const PORT = process.env.PORT || 8080
 
-const app = express()
+const corsOptions = {
+  credentials: true,
+  origin: ['http://localhost:3000'],
+}
+app.use(cors(corsOptions))
+app.use(express.json())
+
+const expressSession = require('express-session')
+var FileStore = require('session-file-store')(expressSession)
+
+app.use(
+  expressSession({
+    store: new FileStore({
+      path: path.join(__dirname, 'sessions'),
+    }),
+    secret: process.env.SESSION_SECRE,
+    resave: false,
+    saveUninitialized: false,
+  })
+)
 
 const server = http.createServer(app)
 const io = new Server(server, {
@@ -69,6 +91,7 @@ app.use('/api/store', storeRouter)
 app.use('/api/user', userRouter)
 app.use('/api/google', googleRouter)
 app.use('/api/filter', filterRouter)
+app.use('/api/auth', authRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
