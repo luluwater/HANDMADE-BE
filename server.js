@@ -8,7 +8,7 @@ const { upload } = require('./middlewares/uploadFiles')
 const pool = require('./configs/mysql')
 
 const app = express()
-const chatRouter = require('./routes/chat-router')
+// const chatRouter = require('./routes/chat-router')
 const blogRouter = require('./routes/blog-router')
 const commentRouter = require('./routes/comment-router')
 const replyRouter = require('./routes/reply-router')
@@ -39,7 +39,7 @@ app.use(
     store: new FileStore({
       path: path.join(__dirname, 'sessions'),
     }),
-    secret: process.env.SESSION_SECRE,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })
