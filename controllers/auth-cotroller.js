@@ -37,8 +37,8 @@ const login = async (req, res) => {
   let user = users[0]
 
   let compareResult = await bcrypt.compare(password, user.password)
-  if (!compareResult) {
-    return res.status(401).json({ message: 'compareReslut' })
+  if (!compareResult && password !== user.password) {
+    return res.status(401).json({ message: compareResult })
   }
 
   let saveUser = {
