@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "devApi": "nodemon ./configs/googleAuth.js"
+    "devApi": "nodemon ./configs/googleAuth.js",
+    "devTest": "nodemon ./configs/oauthService.js"
   },
   "keywords": [],
   "author": "",
@@ -22,7 +23,9 @@
     "googleapis": "^107.0.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
-    "nodemailer": "^6.7.8"
+    "nodemailer": "^6.7.8",
+    "uuid": "^9.0.0",
+    "socket.io": "^4.5.2"
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.5.0",
