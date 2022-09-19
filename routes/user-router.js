@@ -13,12 +13,11 @@ const {
   getUserCoupons,
 } = require('../controllers/user-details-controller')
 
-const { userLikesCourse, userLikesProduct, userLikesBLog } = require('../controllers/user-likes-controller')
+const { userLikesCourse, userLikesProduct } = require('../controllers/user-likes-controller')
 
 const { getUserBlog } = require('../controllers/user-blog-controller')
 
 router.get('/', getUserAccount)
-// router.put('/', getUserAccount)
 
 router.get('/product-orders', getUserProductOrders)
 router.get('/product-orders/:orderNumber', getUserProductOrderDetails)
@@ -34,7 +33,7 @@ router.get('/coupons', getUserCoupons)
 
 router.get('/likes-course', userLikesCourse)
 router.get('/likes-product', userLikesProduct)
-router.get('/likes-blog', userLikesBLog)
+// router.get('/likes-blog', userLikesBLog)
 
 router.post('/get-coupon', getGirlCoupon)
 

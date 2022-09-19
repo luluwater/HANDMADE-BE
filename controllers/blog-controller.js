@@ -68,12 +68,33 @@ const createBlog = async (req, res) => {
 
 //delete http://localhost:8080/api/blog/:blogId
 const deleteBlog = async (req, res) => {
+  const id = req.params.blogId
   if (id === undefined) return
 
   await pool.execute(`UPDATE blog SET valid = 0 WHERE blog.id = ?`, [id])
 
   console.log('Blog delete success!!')
   res.send('success delete Blog')
+}
+
+const hideBlog = async (req, res) => {
+  const id = req.params.blogId
+  if (id === undefined) return
+
+  await pool.execute(`UPDATE blog SET valid = 2 WHERE blog.id = ?`, [id])
+
+  console.log('Blog hide success!!')
+  res.send('success hide Blog')
+}
+
+const showBlog = async (req, res) => {
+  const id = req.params.blogId
+  if (id === undefined) return
+
+  await pool.execute(`UPDATE blog SET valid = 1 WHERE blog.id = ?`, [id])
+
+  console.log('Blog return success!!')
+  res.send('success return Blog')
 }
 
 //put http://localhost:8080/api/blog/:blogId/edit
@@ -108,4 +129,6 @@ module.exports = {
   deleteBlog,
   updateBlog,
   uploadBlogImg,
+  hideBlog,
+  showBlog,
 }
