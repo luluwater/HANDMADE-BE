@@ -12,6 +12,17 @@ const getChatRoom = async (req, res) => {
   res.json(rooms)
 }
 
+const getChatRoomTest = async () => {
+  let [rooms] = await pool.execute('SELECT rooms.* FROM rooms')
+  let [msg] = await pool.execute('SELECT message.*,user.*,message.id AS message_id FROM message JOIN user ON message.user_id = user.id')
+
+  for (let i = 0; i < rooms.length; i++) {
+    rooms[i].msg = msg.filter((m) => m.room_id === rooms[i].id)
+  }
+
+  return rooms
+}
+
 //TODO: IDEA 如果再SEND MESSAGE 後拿到 DATA 是不是就可以拿這個 DATA 來 SOCKET ??
 const sendChatMessage = async (req, res) => {
   const { id, content, user_id, created_at, room_id } = req.body
@@ -27,4 +38,5 @@ const sendChatMessage = async (req, res) => {
 module.exports = {
   getChatRoom,
   sendChatMessage,
+  getChatRoomTest,
 }
