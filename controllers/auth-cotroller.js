@@ -3,12 +3,11 @@ const { validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 
 // http://localhost:8080/api/auth/register
-//TODO: 插入 create time
 const register = async (req, res) => {
-  const { account, email, password } = req.body
+  const { account, email, password, create_time } = req.body
 
-  const validateResult = validationResult(req)
-  console.log('validateResult', validateResult)
+  const validateResult = validationResult(req.body)
+
   if (!validateResult.isEmpty()) {
     return res.status(400).json({ errors: validateResult.array() })
   }
@@ -19,7 +18,7 @@ const register = async (req, res) => {
 
   let hashedPassword = await bcrypt.hash(password, 10)
 
-  let result = await pool.execute('INSERT INTO user (account, email, password, state ) VALUES (?, ?, ?, ? );', [account, email, hashedPassword, 1])
+  let result = await pool.execute('INSERT INTO user (account, email, password, state, create_time ) VALUES (?, ?, ?, ? , ?);', [account, email, hashedPassword, 1, create_time])
 
   console.log('insert new user', result)
 
