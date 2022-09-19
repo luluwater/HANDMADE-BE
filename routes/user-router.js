@@ -34,6 +34,6 @@ router.get('/likes-course', userLikesCourse)
 router.get('/likes-product', userLikesProduct)
 router.get('/likes-blog', userLikesBLog)
 
-router.post('/get-coupon', getGirlCoupon)
+// router.post('/get-coupon', getGirlCoupon)
 
 module.exports = router
