@@ -1,9 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const path = require('path')
 const { upload } = require('./middlewares/uploadFiles')
 
+const app = express()
 const chatRouter = require('./routes/chat-router')
 const blogRouter = require('./routes/blog-router')
 const commentRouter = require('./routes/comment-router')
@@ -17,13 +19,35 @@ const filterRouter = require('./routes/filter-router')
 const SocketServer = require('./configs/socket')
 const http = require('http')
 
+const authRouter = require('./routes/auth-router')
+
 const PORT = process.env.PORT || 8080
-const app = express()
+
+const corsOptions = {
+  credentials: true,
+  origin: ['http://localhost:3000'],
+}
+
+app.use(express.json())
+
+const expressSession = require('express-session')
+var FileStore = require('session-file-store')(expressSession)
+
+app.use(
+  expressSession({
+    store: new FileStore({
+      path: path.join(__dirname, 'sessions'),
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+)
+
 const server = http.createServer(app)
 
-
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(upload.array('files'))
@@ -39,6 +63,7 @@ app.use('/api/user', userRouter)
 app.use('/api/google', googleRouter)
 app.use('/api/filter', filterRouter)
 SocketServer(server)
+app.use('/api/auth', authRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
