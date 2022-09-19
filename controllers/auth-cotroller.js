@@ -4,7 +4,9 @@ const bcrypt = require('bcrypt')
 
 // http://localhost:8080/api/auth/register
 const register = async (req, res) => {
-  const { account, email, password, create_time } = req.body
+  const { id, account, email, password, create_time } = req.body
+
+  console.log(req.body)
 
   const validateResult = validationResult(req.body)
 
@@ -18,7 +20,14 @@ const register = async (req, res) => {
 
   let hashedPassword = await bcrypt.hash(password, 10)
 
-  let result = await pool.execute('INSERT INTO user (account, email, password, state, create_time ) VALUES (?, ?, ?, ? , ?);', [account, email, hashedPassword, 1, create_time])
+  let result = await pool.execute('INSERT INTO user (id, account, email, password, state, create_time ) VALUES (?, ?, ?, ? , ?, ?);', [
+    id,
+    account,
+    email,
+    hashedPassword,
+    1,
+    create_time,
+  ])
 
   console.log('insert new user', result)
 
