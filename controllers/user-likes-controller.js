@@ -1,8 +1,6 @@
 const pool = require('../configs/mysql')
 
 //TODO: user session
-//TODO: 取消收藏
-//TODO: 頁碼
 
 //課程收藏
 const userLikesCourse = async (req, res) => {

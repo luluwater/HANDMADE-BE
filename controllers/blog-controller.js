@@ -50,8 +50,6 @@ const createBlog = async (req, res) => {
 
 //delete http://localhost:8080/api/blog/:blogId
 const deleteBlog = async (req, res) => {
-  const id = req.params.blogId
-
   if (id === undefined) return
 
   await pool.execute(`UPDATE blog SET valid = 0 WHERE blog.id = ?`, [id])
