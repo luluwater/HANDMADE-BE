@@ -2,13 +2,11 @@ const multer = require('multer')
 const { v4: uuidv4 } = require('uuid')
 
 const fileName = (req, file, cb) => {
-  //如果是 avatar 的話回傳 ture
   const isAvatar = file.originalname.includes('profile')
 
   let ext = file.originalname.match(/\..*$/)[0]
 
   isAvatar ? cb(null, `user_${uuidv4()}.${ext}`) : cb(null, `blog_${uuidv4()}.${ext}`)
-  console.log(isAvatar)
 }
 
 const storage = multer.diskStorage({

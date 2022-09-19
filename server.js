@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -6,6 +7,7 @@ const { upload } = require('./middlewares/uploadFiles')
 
 const pool = require('./configs/mysql')
 
+const app = express()
 // const chatRouter = require('./routes/chat-router')
 const blogRouter = require('./routes/blog-router')
 const commentRouter = require('./routes/comment-router')
@@ -19,10 +21,30 @@ const filterRouter = require('./routes/filter-router')
 const categoryRouter = require('./routes/category-router')
 const http = require('http')
 const { Server } = require('socket.io')
+const authRouter = require('./routes/auth-router')
 
 const PORT = process.env.PORT || 8080
 
-const app = express()
+const corsOptions = {
+  credentials: true,
+  origin: ['http://localhost:3000'],
+}
+app.use(cors(corsOptions))
+app.use(express.json())
+
+const expressSession = require('express-session')
+var FileStore = require('session-file-store')(expressSession)
+
+app.use(
+  expressSession({
+    store: new FileStore({
+      path: path.join(__dirname, 'sessions'),
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+)
 
 const server = http.createServer(app)
 const io = new Server(server, {
@@ -55,6 +77,9 @@ io.on('connection', async (socket) => {
 
   socket.emit('rooms', rooms)
   socket.emit('messageToClient', { welcome: 'wlecome' })
+  socket.on('joinRoom', (currentRoom) => {
+    console.log(currentRoom)
+  })
 })
 
 // app.use('/api/chat', chatRouter)
@@ -68,13 +93,12 @@ app.use('/api/user', userRouter)
 app.use('/api/google', googleRouter)
 app.use('/api/filter', filterRouter)
 app.use('/api/category', categoryRouter)
+app.use('/api/auth', authRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
 })
 
-// server.listen(8000, console.log(`webSocket has successfully Start at: ${8000}`))
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`node Server is running on http://localhost:${PORT}`)
 })
