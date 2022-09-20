@@ -40,7 +40,8 @@ app.use(
     store: new FileStore({
       path: path.join(__dirname, 'sessions'),
     }),
-    secret: 'secre',
+    // secret: process.env.SESSION_SECRET,
+    secret: 'secret',
     resave: false,
     saveUninitialized: false,
   })

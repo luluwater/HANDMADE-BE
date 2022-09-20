@@ -95,12 +95,49 @@ async function removeFavoriteProduct(userId, productId) {
   console.log('removeFavoriteProduct', result)
 }
 
+////////// Product Detail //////////
 const getProductDetail = async (req, res) => {
   console.log('test', req)
   const productId = req.params.productId
-  const [product] = await pool.execute('SELECT * FROM product WHERE id = ?', [productId])
-  res.json(product)
-  res.send('sucess')
+  const [product] = await pool.execute(
+    `SELECT product.id, product.category_id, product.name, product.amount, product.intro, product.price, product.amount, product.store_id, category.category_en_name, store.name AS store_name FROM product 
+    JOIN category ON category.id = product.category_id
+    JOIN store ON product.store_id = store.id WHERE product.id =? `,
+    [productId]
+  )
+  const [imgs] = await pool.execute(`SELECT * FROM product_img`)
+  const favorite = await getFavoriteProduct(1)
+
+  const response = product.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.product_id === v.id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+    const isFavorite = favorite.find((v2) => v2.product_id === v.id)
+
+    v['img_name'] = newImagsName
+    v['isFavorite'] = isFavorite ? true : false
+
+    return v
+  })
+  res.json(response)
+}
+
+////////// Product Comment //////////
+const getProductComment = async (req, res) => {
+  const productCommentId = req.params.productCommentId
+  const [productComment] = await pool.execute(
+    `SELECT product_comment.*, user.name AS user_name FROM product_comment
+  JOIN user ON product_comment.user_id = user.id WHERE product_id = ?`,
+    [productCommentId]
+  )
+  const [imgs] = await pool.execute(`SELECT * FROM product_comment_img`)
+
+  const response = productComment.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.id === v.product_comment_img_id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+    v['img_name'] = newImagsName
+    return v
+  })
+  res.json(response)
 }
 
 module.exports = {
@@ -110,4 +147,5 @@ module.exports = {
   getFavoriteProductList,
   removeFavoriteProductTable,
   getProductDetail,
+  getProductComment,
 }

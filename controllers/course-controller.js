@@ -83,4 +83,52 @@ async function removeFavoriteCourse(userId, courseId) {
   console.log('removeFavoriteCourse', result)
 }
 
-module.exports = { getStoreCourse, getAllCourse, getFavoriteCourseList, addFavoriteCourseTable, removeFavoriteCourseTable }
+////////// Course Detail //////////
+const getCourseDetail = async (req, res) => {
+  const courseId = req.params.courseId
+  const [course] = await pool.execute(
+    `SELECT course.id, course.name, course.store_id, course.amount, course.intro, course.price, course.amount, course.course_date, course.course_time, course.note, course.category_id, category.category_en_name, store.address, store.route, store.name AS store_name FROM course 
+    JOIN category ON category.id = course.category_id
+    JOIN store ON course.store_id = store.id WHERE course.id =? `,
+    [courseId]
+  )
+  const [imgs] = await pool.execute(`SELECT * FROM course_img`)
+  const [stocks] = await pool.execute(`SELECT * FROM course_stock WHERE course_stock.stock != "0"`)
+  const favorite = await getFavoriteCourse(1)
+
+  const response = course.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.course_id === v.id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+    const newStocks = stocks.filter((v2) => v2.course_id === v.id)
+    const isFavorite = favorite.find((v2) => v2.course_id === v.id)
+
+    v['img_name'] = newImagsName
+    v['stock_time'] = newStocks
+    v['isFavorite'] = isFavorite ? true : false
+
+    console.log('stock_time', newStocks)
+    return v
+  })
+  res.json(response)
+}
+
+////////// Course Comment //////////
+const getCourseComment = async (req, res) => {
+  const courseCommentId = req.params.courseCommentId
+  const [courseComment] = await pool.execute(
+    `SELECT course_comment.*, user.name AS user_name FROM course_comment JOIN user ON course_comment.user_id = user.id WHERE course_id = ?`,
+    [courseCommentId]
+  )
+  const [imgs] = await pool.execute(`SELECT * FROM course_comment_img`)
+
+  const response = courseComment.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.id === v.course_comment_img_id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+
+    v['img_name'] = newImagsName
+    return v
+  })
+  res.json(response)
+}
+
+module.exports = { getStoreCourse, getAllCourse, getFavoriteCourseList, addFavoriteCourseTable, removeFavoriteCourseTable, getCourseDetail, getCourseComment }

@@ -7,6 +7,7 @@ const {
   addFavoriteProductTable,
   removeFavoriteProductTable,
   getProductDetail,
+  getProductComment,
 } = require('../controllers/product-controller')
 //RESful API
 
@@ -15,6 +16,7 @@ router.get('/', getFavoriteProductList)
 router.post('/:productId', addFavoriteProductTable)
 router.delete('/:productId', removeFavoriteProductTable)
 router.get('/:storeId', getStoreProduct)
-router.get('/:productId', getProductDetail)
+router.get('/detail/:productId', getProductDetail)
+router.get('/comment/:productCommentId', getProductComment)
 
 module.exports = router
