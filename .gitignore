@@ -26,5 +26,5 @@ yarn-error.log*
 /public
 /credentials.json
 /token.json
-
+sessions/
 

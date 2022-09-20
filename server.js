@@ -34,13 +34,13 @@ app.use(express.json())
 
 const expressSession = require('express-session')
 var FileStore = require('session-file-store')(expressSession)
-
+// console.log(process.env.SESSION_SECRET)
 app.use(
   expressSession({
     store: new FileStore({
       path: path.join(__dirname, 'sessions'),
     }),
-    secret: process.env.SESSION_SECRET,
+    secret: 'secre',
     resave: false,
     saveUninitialized: false,
   })
