@@ -1,7 +1,7 @@
 const pool = require('../configs/mysql')
 
 // TODO: isPrivate 加入
-const getChatRoom = async (req, res) => {
+const getChatRooms = async (req, res) => {
   let [rooms] = await pool.execute('SELECT rooms.* FROM rooms')
   let [msg] = await pool.execute('SELECT message.*,user.*,message.id AS message_id FROM message JOIN user ON message.user_id = user.id')
 
@@ -10,6 +10,20 @@ const getChatRoom = async (req, res) => {
   }
 
   res.json(rooms)
+}
+
+const getChatRoom = async (req, res) => {
+  const chatId = req.params.chatId
+
+  const roomEndpoint = `/${chatId}`
+
+  let [room] = await pool.execute('SELECT rooms.* FROM rooms WHERE rooms.endpoint = ?', [roomEndpoint])
+
+  let [msg] = await pool.execute('SELECT message.*,user.*,message.id AS message_id FROM message JOIN user ON message.user_id = user.id')
+
+  room.msg = await msg.filter((m) => m.room_id === room.id)
+
+  res.json(room)
 }
 
 const getChatRoomTest = async () => {
@@ -36,6 +50,7 @@ const sendChatMessage = async (req, res) => {
 }
 
 module.exports = {
+  getChatRooms,
   getChatRoom,
   sendChatMessage,
   getChatRoomTest,

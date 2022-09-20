@@ -1,7 +1,9 @@
 const router = require('express').Router()
-const { getChatRoom, sendChatMessage } = require('../controllers/chat-controller')
+const { getChatRooms, getChatRoom, sendChatMessage } = require('../controllers/chat-controller')
 
-router.get('/', getChatRoom)
+router.get('/', getChatRooms)
+
+router.get('/:chatId', getChatRoom)
 
 router.post('/msg', sendChatMessage)
 
