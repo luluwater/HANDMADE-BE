@@ -31,11 +31,26 @@ const getProductOrder = async (req, res) => {
   const orderId = req.params.orderId
 
   const [data] = await pool.execute(
-    `SELECT product_order.id, product_order.order_number,product_order.payment_id,product_order.total_amount,product_order_list.product_id,product_order_list.amount,product_order_list.price,coupon.coupon_discount ,product.name,payment.name AS payment_name,FROM product_order JOIN product_order_list ON product_order_list.order_id = product_order.id JOIN coupon ON product_order.coupon_id = coupon.id
-    JOIN product ON product_order_list.product_id = product.id JOIN payment ON product_order.payment_id = payment.id WHERE product_order.id =?`,
+    `SELECT product_order.id, product_order.order_number,product_order.create_time,product_order.payment_id,product_order.total_amount,coupon.coupon_discount,coupon.discount_type_id ,payment.name AS payment_name FROM product_order JOIN coupon ON product_order.coupon_id = coupon.id
+    JOIN payment ON product_order.payment_id = payment.id WHERE product_order.id =?`,
     [orderId]
   )
-  res.json(data)
+
+  const [dataDetail] = await pool.execute(
+    `SELECT product_order_list.order_id, product_order_list.product_id,product_order_list.amount,product_order_list.price,product.name FROM product_order_list JOIN product ON product_order_list.product_id = product.id WHERE product_order_list.order_id =?`,
+    [orderId]
+  )
+
+  const response = data.map((v) => {
+    v['orderDetail'] = dataDetail
+    return v
+  })
+
+  res.json(response)
 }
 
 module.exports = { createProductOrder, createProductOrderDetail, getProductOrder }
+
+// `SELECT product_order.id, product_order.order_number,product_order.create_time,product_order.payment_id,product_order.total_amount,product_order_list.product_id,product_order_list.amount,product_order_list.price,coupon.coupon_discount,coupon.discount_type_id ,product.name,payment.name AS payment_name FROM product_order JOIN product_order_list ON product_order_list.order_id = product_order.id JOIN coupon ON product_order.coupon_id = coupon.id
+// JOIN product ON product_order_list.product_id = product.id JOIN payment ON product_order.payment_id = payment.id WHERE product_order.id =?`,
+// [orderId]
