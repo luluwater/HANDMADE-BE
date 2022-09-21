@@ -18,6 +18,7 @@ const storeRouter = require('./routes/store-router')
 const userRouter = require('./routes/user-router')
 const googleRouter = require('./routes/google-router')
 const filterRouter = require('./routes/filter-router')
+const categoryRouter = require('./routes/category-router')
 const http = require('http')
 const { Server } = require('socket.io')
 const authRouter = require('./routes/auth-router')
@@ -34,7 +35,7 @@ app.use(express.json())
 
 const expressSession = require('express-session')
 var FileStore = require('session-file-store')(expressSession)
-
+// console.log(process.env.SESSION_SECRET)
 app.use(
   expressSession({
     store: new FileStore({
@@ -93,6 +94,7 @@ app.use('/api/store', storeRouter)
 app.use('/api/user', userRouter)
 app.use('/api/google', googleRouter)
 app.use('/api/filter', filterRouter)
+app.use('/api/category', categoryRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/order', orderRouter)
 

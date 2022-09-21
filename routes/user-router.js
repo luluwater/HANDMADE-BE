@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { getUserAccount } = require('../controllers/user-account-controller')
+const { getUserAccount, updateUserPassword, updateUserAccount } = require('../controllers/user-account-controller')
 const { getGirlCoupon } = require('../controllers/user-coupon-controller')
 const {
   getUserCourseOrders,
@@ -12,31 +12,31 @@ const {
   productOrderPay,
   getUserCoupons,
 } = require('../controllers/user-details-controller')
-
 const { userLikesCourse, userLikesProduct } = require('../controllers/user-likes-controller')
-
 const { getUserBlog } = require('../controllers/user-blog-controller')
 
-router.get('/', getUserAccount)
+router.get('/:userId', getUserAccount)
+router.put('/password', updateUserPassword)
+router.put('/account', updateUserAccount)
 
-router.get('/product-orders', getUserProductOrders)
+router.get('/:userId/product-orders', getUserProductOrders)
 router.get('/product-orders/:orderNumber', getUserProductOrderDetails)
 router.get('/product-orders/:orderNumber/details', productOrderDetails)
 router.get('/product-orders/:orderNumber/details/pay', productOrderPay)
 
-router.get('/course-orders', getUserCourseOrders)
+router.get('/:userId/course-orders', getUserCourseOrders)
 router.get('/course-orders/:orderNumber', getUserCourseOrderDetails)
 router.get('/course-orders/:orderNumber/details', courseOrderDetails)
 router.get('/course-orders/:orderNumber/details/pay', courseOrderPay)
 
-router.get('/coupons', getUserCoupons)
+router.get('/:userId/coupons', getUserCoupons)
 
-router.get('/likes-course', userLikesCourse)
-router.get('/likes-product', userLikesProduct)
+router.get('/:userId/likes-course', userLikesCourse)
+router.get('/:userId/likes-product', userLikesProduct)
 // router.get('/likes-blog', userLikesBLog)
 
 router.post('/get-coupon', getGirlCoupon)
 
-router.get('/blog', getUserBlog)
+router.get('/:userId/blog', getUserBlog)
 
 module.exports = router

@@ -12,14 +12,15 @@ const getProductList = async (req, res) => {
   )
   const imgs = await pool.execute(`SELECT * FROM product_img`)
   //TODO:參數改session
-  const favorite = await getFavoriteProduct(1)
+  const userId = req.query.userId
+  // console.log(userId)
+  const favorite = userId !== 'undefined' ? await getFavoriteProduct(userId) : []
 
   const response = data[0].map((v) => {
     // const newimgs = []
     const newImgs = imgs[0].filter((v2) => v2.product_id === v.id)
     const newImagsName = newImgs.map((v2) => v2.img_name)
     const isFavorite = favorite.find((v2) => v2.product_id === v.id)
-    // console.log(newImagsName)
     // for (let img of imgs[0]) {
     //   if (v.id === img.product_id) newimgs.push(img.img_name)
     // }
@@ -57,22 +58,25 @@ const getStoreProduct = async (req, res) => {
 
 const getFavoriteProductList = async (req, res) => {
   //TODO: 參數更改session
-  const result = await getFavoriteProduct(1)
+  if (req.query.userId === 'undefined') return res.json('未登入')
+
+  const result = await getFavoriteProduct(req.query.user.id)
   res.json(result)
 }
 
 const addFavoriteProductTable = async (req, res) => {
   //TODO: 參數更改session
-  // console.log(req.body)
+  console.log(req.body)
+  if (req.query.userId === 'undefined') return res.json('未登入')
 
-  await addFavoriteProduct(1, req.body.productId, req.body.storeId, req.body.categoryId)
+  await addFavoriteProduct(req.query.userId, req.body.productId, req.body.storeId, req.body.categoryId)
   res.json({ message: '加入最愛' })
 }
 
 const removeFavoriteProductTable = async (req, res) => {
   //TODO: 參數更改session
-  console.log('req', req.body.productId)
-  await removeFavoriteProduct(1, req.body.productId)
+  if (!req.query.userId === 'undefined') return res.json('未登入')
+  await removeFavoriteProduct(req.query.userId, req.body.productId)
   res.json({ message: '移出最愛' })
 }
 

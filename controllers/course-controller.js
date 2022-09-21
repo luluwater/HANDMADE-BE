@@ -26,7 +26,9 @@ const getAllCourse = async (req, res) => {
   )
   const [courseImgs] = await pool.execute('SELECT course_img.*,course.store_id FROM course_img JOIN course ON course.id = course_img.course_id')
 
-  const favorite = await getFavoriteCourse(1)
+  const userId = req.query.userId
+
+  const favorite = userId !== 'undefined' ? await getFavoriteCourse(userId) : []
 
   const reaponse = data.map((v) => {
     const course_img = courseImgs.filter((img) => img.course_id === v.id)
@@ -42,21 +44,27 @@ const getAllCourse = async (req, res) => {
 
 const getFavoriteCourseList = async (req, res) => {
   //TODO: 參數更改session
-  const result = await getFavoriteCourse(1)
+  if (req.query.userId === 'undefined') return res.json('未登入')
+
+  const result = await getFavoriteCourse(req.query.userId)
   res.json(result)
 }
 
 const addFavoriteCourseTable = async (req, res) => {
   //TODO: 參數更改session
   console.log('id', req.body)
+  // console.log(req.query.userId)
+  if (req.query.userId === 'undefined') return res.json('未登入')
 
-  await addFavoriteCourse(1, req.body.courseId, req.body.storeId, req.body.categoryId)
+  await addFavoriteCourse(req.query.userId, req.body.courseId, req.body.storeId, req.body.categoryId)
   res.json({ message: '加入最愛' })
 }
 
 const removeFavoriteCourseTable = async (req, res) => {
   //TODO: 參數更改session
-  await removeFavoriteCourse(1, req.body.courseId)
+  if (req.query.userId === 'undefined') return res.json('未登入')
+
+  await removeFavoriteCourse(req.query.userId, req.body.courseId)
   res.json({ message: '移出最愛' })
 }
 
