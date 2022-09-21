@@ -1,4 +1,5 @@
 const { Server } = require('socket.io')
+const { getChatRoomTest } = require('../controllers/chat-controller')
 
 const SocketServer = async (server) => {
   const io = new Server(server, {
@@ -9,38 +10,43 @@ const SocketServer = async (server) => {
     },
   })
 
+  let rooms = await getChatRoomTest()
+
   io.on('connection', (socket) => {
-    socket.emit('message', 'welcome to chatCord')
-    socket.broadcast.emit('message', 'A user has join the chat')
-    socket.on('sendMsg', (msg) => {
+    socket.emit('rooms', rooms)
+    socket.on('join', (data) => {
+      socket.emit('welcome-user-msg', `${data.userData.account} 加入${data.currentChat.room_title}`)
+    })
+    socket.on('msgFromClient', (msg) => {
       io.emit('responseMsg', msg)
     })
-
-    socket.on('disconnect', () => {
-      io.emit('message', 'A USER HAS LEFT THE CHAT')
-    })
   })
+
+  // io.on('connection', (socket) => {
+  //   socket.on('joinRoom', (room) => {
+  //     console.log('joinroom', room)
+
+  //     socket.join(room?.room_title)
+
+  //     // socket.emit('join-room-message', `歡迎加入 ${room?.room_title} 聊天室`)
+  //     socket.on('join-room-user', (user) => {
+  //       socket.emit('welcome-user-msg', `${user.account} 加入 ${room?.room_title} `)
+  //     })
+  //   })
+
+  //   socket.on('sendMsg', (msg) => {
+  //     console.log(msg)
+
+  //     io.emit('responseMsg', msg)
+  //   })
+
+  //   // socket.emit('message', 'welcome to chatCord')
+  //   // socket.broadcast.emit('message', 'A user has join the chat')
+
+  //   socket.on('disconnect', () => {
+  //     io.emit('message', 'A USER HAS LEFT THE CHAT')
+  //   })
+  // })
 }
 
 module.exports = SocketServer
-
-// console.log(nsRooms)
-
-// nsRooms.forEach((nsRoom) => {
-//   console.log(nsRoom)
-//   io.of(nsRoom.endpoint).on('connection', (socket) => {
-//     console.log(socket)
-//     console.log(`${socket.id} has join ${nsRoom.endpoint}`)
-//   })
-// })
-
-// io.on('connection', (socket) => {
-//   socket.on('joinRoom', (room) => {
-//     socket.join(room.room_title)
-//     socket.emit('join-room-message', `You've join ${room.room_title} room`)
-//     //TODO:LOCALHOST 的 USER ID 拿來用
-//     io.sockets.to(room.room_title).emit('room-broadcast', `${socket.id} has join this room`)
-
-//     io.sockets.to(room.room_title).emit('typing', `user typing...`)
-//   })
-// })
