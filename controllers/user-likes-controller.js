@@ -4,9 +4,10 @@ const pool = require('../configs/mysql')
 
 //課程收藏
 const userLikesCourse = async (req, res) => {
-  // const course_id = req.params.courseId
+  const userId = req.params.userId
   const data = await pool.execute(
-    'SELECT user_favorite_course.*, category.category_en_name, course.store_id, store.name AS store_name, course.name AS course_name, course.price FROM user_favorite_course JOIN user ON user_favorite_course.user_id = user.id JOIN course ON user_favorite_course.course_id = course.id JOIN store ON user_favorite_course.store_id = store.id JOIN category ON user_favorite_course.category_id = category.id WHERE user.id = 1'
+    'SELECT user_favorite_course.*, category.category_en_name, course.store_id, store.name AS store_name, course.name AS course_name, course.price FROM user_favorite_course JOIN user ON user_favorite_course.user_id = user.id JOIN course ON user_favorite_course.course_id = course.id JOIN store ON user_favorite_course.store_id = store.id JOIN category ON user_favorite_course.category_id = category.id WHERE user.id = ?',
+    [userId]
   )
   const courseImgs = await pool.execute(`SELECT * FROM course_img`)
   const dataCourseDetail = data[0].map((v) => {
@@ -22,9 +23,10 @@ const userLikesCourse = async (req, res) => {
 
 //商品收藏
 const userLikesProduct = async (req, res) => {
-  // const product_id = req.params.productId
+  const userId = req.params.userId
   const data = await pool.execute(
-    'SELECT user_favorite_product.*, category.category_en_name, product.store_id, store.name AS store_name, product.name AS product_name, product.price FROM user_favorite_product JOIN user ON user_favorite_product.user_id = user.id JOIN category ON user_favorite_product.category_id = category.id JOIN product ON user_favorite_product.product_id = product.id JOIN store ON user_favorite_product.store_id = store.id WHERE user.id = 1'
+    'SELECT user_favorite_product.*, category.category_en_name, product.store_id, store.name AS store_name, product.name AS product_name, product.price, product.amount FROM user_favorite_product JOIN user ON user_favorite_product.user_id = user.id JOIN category ON user_favorite_product.category_id = category.id JOIN product ON user_favorite_product.product_id = product.id JOIN store ON user_favorite_product.store_id = store.id WHERE user.id = ?',
+    [userId]
   )
   const productImgs = await pool.execute(`SELECT * FROM product_img`)
   //TODO: 參數改session

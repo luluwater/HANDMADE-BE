@@ -22,6 +22,7 @@ const categoryRouter = require('./routes/category-router')
 const http = require('http')
 const { Server } = require('socket.io')
 const authRouter = require('./routes/auth-router')
+const orderRouter = require('./routes/order-router')
 
 const PORT = process.env.PORT || 8080
 
@@ -95,6 +96,7 @@ app.use('/api/google', googleRouter)
 app.use('/api/filter', filterRouter)
 app.use('/api/category', categoryRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/order', orderRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
