@@ -35,7 +35,7 @@ router.get('/:userId/likes-course', userLikesCourse)
 router.get('/:userId/likes-product', userLikesProduct)
 // router.get('/likes-blog', userLikesBLog)
 
-router.post('/get-coupon', getGirlCoupon)
+router.put('/:userId/get-coupon', getGirlCoupon)
 
 router.get('/:userId/blog', getUserBlog)
 
