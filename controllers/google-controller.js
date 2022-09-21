@@ -189,7 +189,7 @@ const sendValidationMail = async (req, res) => {
      */
     const mailOptions = {
       ...mailoptions,
-      html: '<b>Hello world?</b> <h1>船船</h1> <a href="http://localhost:3000/ResetPassword">login</a>',
+      html: `<b>Hello world?</b> <h1>船船</h1> <a href="http://localhost:3000/ResetPassword/${mail}">login</a>`,
     }
 
     const result = await transport.sendMail(mailOptions)
