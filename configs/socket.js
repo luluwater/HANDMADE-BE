@@ -39,7 +39,6 @@ module.exports = SocketServer
 //     socket.join(room.room_title)
 //     socket.emit('join-room-message', `You've join ${room.room_title} room`)
 //     //TODO:LOCALHOST 的 USER ID 拿來用
-
 //     io.sockets.to(room.room_title).emit('room-broadcast', `${socket.id} has join this room`)
 
 //     io.sockets.to(room.room_title).emit('typing', `user typing...`)
