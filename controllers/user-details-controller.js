@@ -108,7 +108,7 @@ const productOrderPay = async (req, res) => {
 const getUserCoupons = async (req, res) => {
   const userId = req.params.userId
   const [dataCoupon] = await pool.execute(
-    'SELECT user_discount.*, coupon.name AS coupon_name, coupon.discount_code, coupon.start_date, coupon.discount_type_id, coupon.end_date, coupon_discount, coupon.discount_code FROM user_discount JOIN coupon ON user_discount.coupon_id = coupon.id JOIN user ON user_discount.user_id = user.id WHERE user_discount.user_id = ?',
+    'SELECT user_discount.*, coupon.name AS coupon_name, coupon.discount_code, coupon.start_date, coupon.discount_type_id, coupon.end_date, pay, coupon_discount, coupon.discount_code FROM user_discount JOIN coupon ON user_discount.coupon_id = coupon.id JOIN user ON user_discount.user_id = user.id WHERE user_discount.user_id = ?',
     [userId]
   )
 
