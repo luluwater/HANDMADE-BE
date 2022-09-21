@@ -1,8 +1,8 @@
 const router = require('express').Router()
 
-const { createProductOrder, createProductOrderDetail } = require('../controllers/order-controller')
+const { createProductOrder, createProductOrderDetail, getProductOrder } = require('../controllers/order-controller')
 
-router.get('/product/:orderId', createProductOrder)
+router.get('/product/:orderId', getProductOrder)
 
 router.post('/product', createProductOrder)
 router.post('/product/detail', createProductOrderDetail)

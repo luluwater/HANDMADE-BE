@@ -27,4 +27,15 @@ const createProductOrderDetail = async (req, res) => {
   res.send('success')
 }
 
-module.exports = { createProductOrder, createProductOrderDetail }
+const getProductOrder = async (req, res) => {
+  const orderId = req.params.orderId
+
+  const [data] = await pool.execute(
+    `SELECT product_order.id, product_order.order_number,product_order.payment_id,product_order.total_amount,product_order_list.product_id,product_order_list.amount,product_order_list.price,coupon.coupon_discount ,product.name,payment.name AS payment_name,FROM product_order JOIN product_order_list ON product_order_list.order_id = product_order.id JOIN coupon ON product_order.coupon_id = coupon.id
+    JOIN product ON product_order_list.product_id = product.id JOIN payment ON product_order.payment_id = payment.id WHERE product_order.id =?`,
+    [orderId]
+  )
+  res.json(data)
+}
+
+module.exports = { createProductOrder, createProductOrderDetail, getProductOrder }
