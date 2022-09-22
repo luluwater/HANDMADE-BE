@@ -16,10 +16,15 @@ const storeRouter = require('./routes/store-router')
 const userRouter = require('./routes/user-router')
 const googleRouter = require('./routes/google-router')
 const filterRouter = require('./routes/filter-router')
+<<<<<<< HEAD
 const SocketServer = require('./configs/socket')
+=======
+const categoryRouter = require('./routes/category-router')
+>>>>>>> develop
 const http = require('http')
 
 const authRouter = require('./routes/auth-router')
+const orderRouter = require('./routes/order-router')
 
 const PORT = process.env.PORT || 8080
 
@@ -32,13 +37,14 @@ app.use(express.json())
 
 const expressSession = require('express-session')
 var FileStore = require('session-file-store')(expressSession)
-
+// console.log(process.env.SESSION_SECRET)
 app.use(
   expressSession({
     store: new FileStore({
       path: path.join(__dirname, 'sessions'),
     }),
-    secret: process.env.SESSION_SECRET,
+    // secret: process.env.SESSION_SECRET,
+    secret: 'secret',
     resave: false,
     saveUninitialized: false,
   })
@@ -63,7 +69,9 @@ app.use('/api/user', userRouter)
 app.use('/api/google', googleRouter)
 app.use('/api/filter', filterRouter)
 SocketServer(server)
+app.use('/api/category', categoryRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/order', orderRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')

@@ -1,14 +1,17 @@
 const pool = require('../configs/mysql')
 
-//TODO: session
-
 //課程訂單All
 const getUserCourseOrders = async (req, res) => {
+  const userId = req.params.userId
+
   const [dataCourse] = await pool.execute(
-    'SELECT course_order.*, course_order.name AS course_order_name, payment.name AS payment_name, order_staus.name AS order_staus_name FROM course_order JOIN order_staus ON course_order.order_state_id = order_staus.id JOIN payment ON course_order.payment_id = payment.id JOIN user ON course_order.user_id = user.id WHERE course_order.user_id = 1 ORDER BY course_order.create_time DESC'
+    'SELECT course_order.*, course_order.name AS course_order_name, payment.name AS payment_name, order_staus.name AS order_staus_name FROM course_order JOIN order_staus ON course_order.order_state_id = order_staus.id JOIN payment ON course_order.payment_id = payment.id JOIN user ON course_order.user_id = user.id WHERE course_order.user_id = ? ORDER BY course_order.create_time DESC',
+    [userId]
   )
+
   const data = dataCourse.length === 0 ? 0 : dataCourse
   // console.log(dataCourse.length)
+
   res.json(data)
 }
 
@@ -52,8 +55,10 @@ const courseOrderPay = async (req, res) => {
 
 //商品訂單All
 const getUserProductOrders = async (req, res) => {
+  const userId = req.params.userId
   const [dataProduct] = await pool.execute(
-    'SELECT product_order.*, product_order.name AS product_order_name, user.name AS user_name, payment.name AS payment_name, order_staus.name AS order_staus_name FROM product_order JOIN order_staus ON product_order.order_state_id = order_staus.id JOIN payment ON product_order.payment_id = payment.id JOIN user ON product_order.user_id = user.id WHERE product_order.user_id = 1 ORDER BY product_order.create_time DESC'
+    'SELECT product_order.*, product_order.name AS product_order_name, user.name AS user_name, payment.name AS payment_name, order_staus.name AS order_staus_name FROM product_order JOIN order_staus ON product_order.order_state_id = order_staus.id JOIN payment ON product_order.payment_id = payment.id JOIN user ON product_order.user_id = user.id WHERE product_order.user_id = ? ORDER BY product_order.create_time DESC',
+    [userId]
   )
 
   const data = dataProduct.length === 0 ? 0 : dataProduct
@@ -101,8 +106,10 @@ const productOrderPay = async (req, res) => {
 
 //coupon
 const getUserCoupons = async (req, res) => {
+  const userId = req.params.userId
   const [dataCoupon] = await pool.execute(
-    'SELECT user_discount.*, coupon.name AS coupon_name, coupon.discount_code, coupon.start_date, coupon.discount_type_id, coupon.end_date, coupon_discount, coupon.discount_code FROM user_discount JOIN coupon ON user_discount.coupon_id = coupon.id JOIN user ON user_discount.user_id = user.id WHERE user_discount.user_id = 1'
+    'SELECT user_discount.*, coupon.name AS coupon_name, coupon.discount_code, coupon.start_date, coupon.discount_type_id, coupon.end_date, pay, coupon_discount, coupon.discount_code FROM user_discount JOIN coupon ON user_discount.coupon_id = coupon.id JOIN user ON user_discount.user_id = user.id WHERE user_discount.user_id = ?',
+    [userId]
   )
 
   const data = dataCoupon.length === 0 ? 0 : dataCoupon

@@ -12,14 +12,15 @@ const getProductList = async (req, res) => {
   )
   const imgs = await pool.execute(`SELECT * FROM product_img`)
   //TODO:參數改session
-  const favorite = await getFavoriteProduct(1)
+  const userId = req.query.userId
+  // console.log(userId)
+  const favorite = userId !== 'undefined' ? await getFavoriteProduct(userId) : []
 
   const response = data[0].map((v) => {
     // const newimgs = []
     const newImgs = imgs[0].filter((v2) => v2.product_id === v.id)
     const newImagsName = newImgs.map((v2) => v2.img_name)
     const isFavorite = favorite.find((v2) => v2.product_id === v.id)
-    // console.log(newImagsName)
     // for (let img of imgs[0]) {
     //   if (v.id === img.product_id) newimgs.push(img.img_name)
     // }
@@ -57,22 +58,25 @@ const getStoreProduct = async (req, res) => {
 
 const getFavoriteProductList = async (req, res) => {
   //TODO: 參數更改session
-  const result = await getFavoriteProduct(1)
+  if (req.query.userId === 'undefined') return res.json('未登入')
+
+  const result = await getFavoriteProduct(req.query.user.id)
   res.json(result)
 }
 
 const addFavoriteProductTable = async (req, res) => {
   //TODO: 參數更改session
   console.log(req.body)
+  if (req.query.userId === 'undefined') return res.json('未登入')
 
-  await addFavoriteProduct(1, req.body.productId, req.body.storeId, req.body.categoryId)
+  await addFavoriteProduct(req.query.userId, req.body.productId, req.body.storeId, req.body.categoryId)
   res.json({ message: '加入最愛' })
 }
 
 const removeFavoriteProductTable = async (req, res) => {
   //TODO: 參數更改session
-  console.log('req', req.body.productId)
-  await removeFavoriteProduct(1, req.body.productId)
+  if (!req.query.userId === 'undefined') return res.json('未登入')
+  await removeFavoriteProduct(req.query.userId, req.body.productId)
   res.json({ message: '移出最愛' })
 }
 
@@ -91,12 +95,52 @@ async function removeFavoriteProduct(userId, productId) {
   console.log('removeFavoriteProduct', result)
 }
 
+////////// Product Detail //////////
 const getProductDetail = async (req, res) => {
-  console.log('test', req)
+  // console.log('test', req)
   const productId = req.params.productId
-  const [product] = await pool.execute('SELECT * FROM product WHERE id = ?', [productId])
-  res.json(product)
-  res.send('sucess')
+  const [product] = await pool.execute(
+    `SELECT product.id, product.category_id, product.name, product.amount, product.intro, product.price, product.amount, product.store_id, category.category_en_name, store.name AS store_name FROM product 
+    JOIN category ON category.id = product.category_id
+    JOIN store ON product.store_id = store.id WHERE product.id =? `,
+    [productId]
+  )
+  const userId = req.query.userId
+  const [imgs] = await pool.execute(`SELECT * FROM product_img`)
+  // const favorite = await getFavoriteProduct(1)
+  // console.log(userId)
+  const favorite = userId ? await getFavoriteProduct(userId) : []
+
+  const response = product.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.product_id === v.id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+    const isFavorite = favorite.find((v2) => v2.product_id === v.id)
+
+    v['img_name'] = newImagsName
+    v['isFavorite'] = isFavorite ? true : false
+
+    return v
+  })
+  res.json(response)
+}
+
+////////// Product Comment //////////
+const getProductComment = async (req, res) => {
+  const productCommentId = req.params.productCommentId
+  const [productComment] = await pool.execute(
+    `SELECT product_comment.*, user.name AS user_name FROM product_comment
+  JOIN user ON product_comment.user_id = user.id WHERE product_id = ?`,
+    [productCommentId]
+  )
+  const [imgs] = await pool.execute(`SELECT * FROM product_comment_img`)
+
+  const response = productComment.map((v) => {
+    const newImgs = imgs.filter((v2) => v2.id === v.product_comment_img_id)
+    const newImagsName = newImgs.map((v2) => v2.img_name)
+    v['img_name'] = newImagsName
+    return v
+  })
+  res.json(response)
 }
 
 module.exports = {
@@ -106,4 +150,5 @@ module.exports = {
   getFavoriteProductList,
   removeFavoriteProductTable,
   getProductDetail,
+  getProductComment,
 }
