@@ -7,41 +7,12 @@ const auth = async () => {
   await authorize()
 }
 
-let event = {
-  summary: '今天是星期四!',
-  location: '台北市中山區遼寧街19巷23號',
-  description:
-    '台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號',
-  start: {
-    dateTime: '2022-09-11T05:40:00',
-    timeZone: 'Asia/Taipei',
-  },
-  end: {
-    dateTime: '2022-09-012T06:00:00',
-    timeZone: 'Asia/Taipei',
-  },
-  reminders: {
-    useDefault: false,
-    overrides: [
-      { method: 'email', minutes: 3 },
-      { method: 'popup', minutes: 10 },
-    ],
-  },
-
-  colorId: 2,
-}
-
-//TODO: 插不進去喇
-//!0908 目前是 enjoy project 的 網路用戶端 3
 //POST http://localhost:8080/api/google/calendar
-const addToSchedule = async () => {
+const addToSchedule = async (req, res) => {
   const authRefreshData = await authorize()
   const clientId = authRefreshData._clientId
   const clientSecret = authRefreshData._clientSecret
   const refreshToken = authRefreshData.credentials.refresh_token
-  console.log('clientId', clientId)
-  console.log('clientSecret', clientSecret)
-  console.log('refreshToken', refreshToken)
 
   const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret)
 
@@ -51,11 +22,37 @@ const addToSchedule = async () => {
 
   const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
+  //TODO: 填滿 summary、location、description、start、 end
+  const { summary, address, description, start, end } = req.body
+  let event = {
+    summary: '今天是星期四!',
+    location: '台北市中山區遼寧街19巷23號',
+    description:
+      '台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號',
+    start: {
+      dateTime: '2022-09-18T05:40:00',
+      timeZone: 'Asia/Taipei',
+    },
+    end: {
+      dateTime: '2022-09-21T06:00:00',
+      timeZone: 'Asia/Taipei',
+    },
+    reminders: {
+      useDefault: false,
+      overrides: [
+        { method: 'email', minutes: 3 },
+        { method: 'popup', minutes: 10 },
+      ],
+    },
+
+    colorId: 4,
+  }
+
   await calendar.freebusy.query(
     {
       resource: {
-        timeMin: '2022-09-01T09:00:00-07:00',
-        timeMax: '2022-09-30T17:00:00-07:00',
+        timeMin: '2022-09-11T09:00:00-07:00',
+        timeMax: '2022-09-17T17:00:00-07:00',
         timeZone: 'Asia/Taipei',
         items: [{ id: 'primary' }],
       },
@@ -72,7 +69,7 @@ const addToSchedule = async () => {
       return console.log(`Sorry I'm Busy`)
     }
   )
-  // res.send('success')
+  res.send('done')
 }
 
 //TODO:訂單確認信內容塞入訂單編號

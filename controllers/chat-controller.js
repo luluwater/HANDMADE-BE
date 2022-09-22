@@ -11,6 +11,15 @@ const getChatRooms = async (req, res) => {
   res.json(rooms)
 }
 
+// http://localhost:8080/api/chat/:chatId/msg
+const getChatMessages = async (req, res) => {
+  const chatId = req.params.chatId
+
+  let [msg] = await pool.execute('SELECT message.*, user.*, message.id AS message_id FROM message JOIN user ON message.user_id = user.id  WHERE message.room_id = ?', [chatId])
+
+  res.json(msg)
+}
+
 const getChatRoom = async (req, res) => {
   const chatId = req.params.chatId
 
@@ -50,4 +59,5 @@ module.exports = {
   getChatRoom,
   sendChatMessage,
   getChatRoomTest,
+  getChatMessages,
 }

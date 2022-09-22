@@ -12,41 +12,39 @@ const SocketServer = async (server) => {
 
   let rooms = await getChatRoomTest()
 
-  io.on('connection', (socket) => {
-    socket.emit('rooms', rooms)
-    socket.on('join', (data) => {
-      socket.emit('welcome-user-msg', `${data.userData.account} 加入${data.currentChat.room_title}`)
-    })
-    socket.on('msgFromClient', (msg) => {
-      io.emit('responseMsg', msg)
-    })
-  })
-
   // io.on('connection', (socket) => {
-  //   socket.on('joinRoom', (room) => {
-  //     console.log('joinroom', room)
-
-  //     socket.join(room?.room_title)
-
-  //     // socket.emit('join-room-message', `歡迎加入 ${room?.room_title} 聊天室`)
-  //     socket.on('join-room-user', (user) => {
-  //       socket.emit('welcome-user-msg', `${user.account} 加入 ${room?.room_title} `)
-  //     })
+  //   socket.emit('rooms', rooms)
+  //   socket.on('join', (data) => {
+  //     socket.emit('welcome-user-msg', `${data.userData.account} 加入${data.currentChat.room_title}`)
   //   })
-
-  //   socket.on('sendMsg', (msg) => {
-  //     console.log(msg)
-
+  //   socket.on('msgFromClient', (msg) => {
   //     io.emit('responseMsg', msg)
   //   })
-
-  //   // socket.emit('message', 'welcome to chatCord')
-  //   // socket.broadcast.emit('message', 'A user has join the chat')
-
-  //   socket.on('disconnect', () => {
-  //     io.emit('message', 'A USER HAS LEFT THE CHAT')
-  //   })
   // })
+
+  io.on('connection', (socket) => {
+    console.log('some one connection')
+    socket.on('rooms', (room) => {
+      socket.emit()
+    })
+
+    socket.on('sendMessage', (data) => {
+      socket.emit('receiveMsg', data) 
+    })
+
+    // socket.on('sendMsg', (msg) => {
+    //   console.log(msg)
+
+    //   io.emit('responseMsg', msg)
+    // })
+
+    // socket.emit('message', 'welcome to chatCord')
+    // socket.broadcast.emit('message', 'A user has join the chat')
+
+    socket.on('disconnect', () => {
+      io.emit('message', 'A USER HAS LEFT THE CHAT')
+    })
+  })
 }
 
 module.exports = SocketServer
