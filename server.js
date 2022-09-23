@@ -16,11 +16,8 @@ const storeRouter = require('./routes/store-router')
 const userRouter = require('./routes/user-router')
 const googleRouter = require('./routes/google-router')
 const filterRouter = require('./routes/filter-router')
-<<<<<<< HEAD
 const SocketServer = require('./configs/socket')
-=======
 const categoryRouter = require('./routes/category-router')
->>>>>>> develop
 const http = require('http')
 
 const authRouter = require('./routes/auth-router')
