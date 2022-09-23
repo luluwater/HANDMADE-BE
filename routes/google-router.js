@@ -1,10 +1,12 @@
 const router = require('express').Router()
-const { sendMail, auth, addToSchedule } = require('../controllers/google-controller')
+const { auth, addToSchedule, sendValidationMail, orderConfirmation } = require('../controllers/google-controller')
 
-router.get('/sendmail', sendMail)
+router.post('/orderConfirmation', orderConfirmation)
 
-router.get('/calendar', addToSchedule)
+router.post('/validationMail', sendValidationMail)
 
-router.get('/auth', auth)
+router.post('/calendar', addToSchedule)
+
+router.post('/auth', auth)
 
 module.exports = router

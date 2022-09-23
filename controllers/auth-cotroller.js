@@ -76,4 +76,23 @@ const logout = async (req, res) => {
   res.json({ message: ' 登出成功' })
 }
 
-module.exports = { login, logout, register }
+// http://localhost:8080/api/auth/resetPassword
+const resetPassword = async (req, res) => {
+  const { email, password } = req.body
+
+  const validateResult = validationResult(req.body)
+
+  if (!validateResult.isEmpty()) {
+    return res.status(400).json({ errors: validateResult.array() })
+  }
+
+  let hashedPassword = await bcrypt.hash(password, 10)
+
+  if (email === undefined) return
+  await pool.execute(`UPDATE user SET password = ? WHERE user.email = ?`, [hashedPassword, email])
+
+  console.log('User password UPDATE success!!')
+  res.json({ message: '更新成功' })
+}
+
+module.exports = { login, logout, register, resetPassword }

@@ -4,7 +4,7 @@ const getAllComment = async (req, res) => {
   const blogId = req.params.blogId
 
   let [comment] = await pool.execute(
-    'SELECT comment.*, blog.id, user.name, user.avatar , comment.id AS comment_id FROM comment JOIN blog ON comment.blog_id = blog.id JOIN user ON comment.user_id = user.id WHERE blog.id = ? AND comment.valid = 1 ORDER BY comment.comment_date ASC',
+    'SELECT comment.*, blog.id, user.account, user.avatar , comment.id AS comment_id FROM comment JOIN blog ON comment.blog_id = blog.id JOIN user ON comment.user_id = user.id WHERE blog.id = ? AND comment.valid = 1 ORDER BY comment.comment_date ASC',
     [blogId]
   )
 

@@ -92,9 +92,11 @@ const getCourseDetail = async (req, res) => {
     JOIN store ON course.store_id = store.id WHERE course.id =? `,
     [courseId]
   )
+
+  const userId = req.query.userId
   const [imgs] = await pool.execute(`SELECT * FROM course_img`)
   const [stocks] = await pool.execute(`SELECT * FROM course_stock WHERE course_stock.stock != "0"`)
-  const favorite = await getFavoriteCourse(1)
+  const favorite = userId ? await getFavoriteCourse(userId) : []
 
   const response = course.map((v) => {
     const newImgs = imgs.filter((v2) => v2.course_id === v.id)
