@@ -17,7 +17,7 @@ let event = {
     timeZone: 'Asia/Taipei',
   },
   end: {
-    dateTime: '2022-09-012T06:00:00',
+    dateTime: '2022-09-12T06:00:00',
     timeZone: 'Asia/Taipei',
   },
   reminders: {
