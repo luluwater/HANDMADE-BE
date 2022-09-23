@@ -23,12 +23,11 @@ const addToSchedule = async (req, res) => {
   const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
   //TODO: 填滿 summary、location、description、start、 end
-  const { summary, address, description, start, end } = req.body
+  const { name, address, note, start, end } = req.body
   let event = {
-    summary: '今天是星期四!',
-    location: '台北市中山區遼寧街19巷23號',
-    description:
-      '台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號台北市中山區遼寧街19巷23號',
+    summary: name,
+    location: address,
+    description:note,
     start: {
       dateTime: '2022-09-18T05:40:00',
       timeZone: 'Asia/Taipei',
