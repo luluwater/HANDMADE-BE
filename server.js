@@ -22,6 +22,7 @@ const http = require('http')
 
 const authRouter = require('./routes/auth-router')
 const orderRouter = require('./routes/order-router')
+const couponRouter = require('./routes/coupon-router')
 
 const PORT = process.env.PORT || 8080
 
@@ -69,6 +70,7 @@ SocketServer(server)
 app.use('/api/category', categoryRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/order', orderRouter)
+app.use('/api/coupon', couponRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
