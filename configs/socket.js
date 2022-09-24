@@ -24,12 +24,16 @@ const SocketServer = async (server) => {
 
   io.on('connection', (socket) => {
     console.log('some one connection')
-    socket.on('rooms', (room) => {
-      socket.emit()
+
+    socket.emit('rooms', rooms)
+
+    socket.on('joinRoomMsg', (welcomeMsg) => {
+      console.log('welcomeMsg', welcomeMsg)
+      socket.emit('welcomeMsg', welcomeMsg)
     })
 
     socket.on('sendMessage', (data) => {
-      socket.emit('receiveMsg', data) 
+      socket.emit('receiveMsg', data)
     })
 
     // socket.on('sendMsg', (msg) => {

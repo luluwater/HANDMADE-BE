@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer')
 const { google } = require('googleapis')
 require('dotenv').config()
 const { authorize } = require('../configs/googleAuth')
+const path = require('path')
 
 const auth = async () => {
   await authorize()
@@ -92,6 +93,10 @@ const orderConfirmation = async (req, res) => {
   oAuth2Client.setCredentials({
     refresh_token: refreshToken,
   })
+
+  console.log('req.bodyreqreqreq', req.body)
+
+  // const Template = path.join(__dirname, './test.pug', `${template}`)
 
   const auth = {
     type: 'OAuth2',
