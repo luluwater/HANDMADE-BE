@@ -105,4 +105,4 @@ const getCourseOrder = async (req, res) => {
   res.json(response)
 }
 
-module.exports = { createProductOrder, createProductOrderDetail, getProductOrder, createCourseOrder, createCourseOrderDetail, getCourseOrder }
+module.exports = { createProductOrder, createProductOrderDetail, getProductOrder, createCourseOrder, createCourseOrderDetail, getCourseOrder } 
