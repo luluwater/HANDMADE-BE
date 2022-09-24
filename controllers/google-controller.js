@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 const { google } = require('googleapis')
 require('dotenv').config()
 const { authorize } = require('../configs/googleAuth')
-const path = require('path')
+const pug = require('pug')
 
 const auth = async () => {
   await authorize()
@@ -23,7 +23,6 @@ const addToSchedule = async (req, res) => {
 
   const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
-  //TODO: 填滿 summary、location、description、start、 end
   const { name, address, note, date, time_start, time_end } = req.body
   let event = {
     summary: name,
@@ -47,7 +46,6 @@ const addToSchedule = async (req, res) => {
 
     colorId: 4,
   }
-  console.log('req.body', req.body)
 
   await calendar.freebusy.query(
     {
@@ -81,22 +79,15 @@ const orderConfirmation = async (req, res) => {
   const clientSecret = authRefreshData._clientSecret
   const refreshToken = authRefreshData.credentials.refresh_token
   const redirect = authRefreshData.redirectUri
-
-  /**
-   * 用拿到的 cliend_id 和 client_secret來建立一個新的 OAuth2
-   */
   const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret, redirect)
 
-  /**
-   * 並在建立的 oAuth 中設置他的 Credentials，裡面要放入 refresh token
-   */
   oAuth2Client.setCredentials({
     refresh_token: refreshToken,
   })
 
-  console.log('req.bodyreqreqreq', req.body)
+  const { orderNumber, order_detail, create_time, total_amount } = req.body
 
-  // const Template = path.join(__dirname, './test.pug', `${template}`)
+  console.log(orderNumber, order_detail, create_time, total_amount)
 
   const auth = {
     type: 'OAuth2',
@@ -106,7 +97,6 @@ const orderConfirmation = async (req, res) => {
     refreshToken,
   }
 
-  //TODO:subject 加入前端送來的訂單編號
   const mailoptions = {
     from: 'Siddhant &lt;<angusapril648@gmail.com>',
     to: 'carzydarkcat@gmail.com',
@@ -123,50 +113,15 @@ const orderConfirmation = async (req, res) => {
       },
     })
 
-    //TODO: html:裡面寫從前端送來的 req.body 的 context 放到這裡面來
-    const mailOptions = {
-      ...mailoptions,
-      html: `<h1>您的訂單已完成，謝謝您的訂購！</h1>
-      <b style="color: #e77656">
-        此信件為重要信件，交易完成前請保留此信件以利查詢。
-      </b>
-      <h4>訂單編號 &nbsp; #221012088</h4>
-      <table style="width: 40%; border: 1px solid #5f5c51; padding: 20px">
-        <tbody>
-          <tr>
-            <td style="width: 15%">商品類別</td>
-            <td style="width: 25%">商品名稱</td>
-            <td style="width: 15%">數量</td>
-            <td style="width: 15%">小計</td>
-            <td style="width: 30%">備註</td>
-          </tr>
-          <tr>
-            <td style="width: 15%">課程</td>
-            <td style="width: 25%">陶盤進階手捏課程</td>
-            <td style="width: 15%">2</td>
-            <td style="width: 15%">2480</td>
-            <td style="width: 30%">2022/10/18 13:00</td>
-          </tr>
-          <tr>
-            <td style="width: 15%">課程</td>
-            <td style="width: 25%">手綁鬱金香花束</td>
-            <td style="width: 15%">1</td>
-            <td style="width: 15%">2880</td>
-            <td style="width: 30%">2022/10/08 10:00</td>
-          </tr>
-        </tbody>
-      </table>
-      <h4>總金額 &nbsp; NT.5360</h4>
-      <p>
-        本郵件由系統自動產生與發送，請勿直接回覆。<br />
-        如欲查詢訂單狀況，請至「手手 Handmade」<b style="color: #e77656"
-          >會員中心 > 訂單管理</b
-        >
-        &nbsp;查看。
-      </p>`,
-    }
+    // const mailOptions = {
+    //   ...mailoptions,
+    // }
+    mailoptions.html = pug.renderFile(__dirname + '..', '/view/layout.pug', { text: '手手' })
 
-    const result = await transport.sendMail(mailOptions)
+    // mailOptions.html = pug.renderFile(__dirname + '/views/mail_template.pug', { text: '狗王' })
+
+    //TODO: html:裡面寫從前端送來的 req.body 的 context 放到這裡面來
+    const result = await transport.sendMail(mailoptions)
     console.log('Success send the mail')
     res.send(result)
   } catch (error) {
@@ -252,3 +207,43 @@ module.exports = {
   sendValidationMail,
   addToSchedule,
 }
+
+// : `<h1>您的訂單已完成，謝謝您的訂購！</h1>
+//       <b style="color: #e77656">
+//         此信件為重要信件，交易完成前請保留此信件以利查詢。
+//       </b>
+//       <h3>訂單編號 &nbsp; #221012088</h3>
+//       <h4>訂單成立時間 &nbsp; 2022-09-24 </h4>
+//       <table style="width: 40%; border: 1px solid #5f5c51; padding: 20px">
+//         <tbody>
+//           <tr>
+//             <td style="width: 15%">商品類別</td>
+//             <td style="width: 25%">商品名稱</td>
+//             <td style="width: 15%">數量</td>
+//             <td style="width: 15%">小計</td>
+//             <td style="width: 30%">備註</td>
+//           </tr>
+//           <tr>
+//             <td style="width: 15%">課程</td>
+//             <td style="width: 25%">陶盤進階手捏課程</td>
+//             <td style="width: 15%">2</td>
+//             <td style="width: 15%">2480</td>
+//             <td style="width: 30%">2022/10/18 13:00</td>
+//           </tr>
+//           <tr>
+//             <td style="width: 15%">課程</td>
+//             <td style="width: 25%">手綁鬱金香花束</td>
+//             <td style="width: 15%">1</td>
+//             <td style="width: 15%">2880</td>
+//             <td style="width: 30%">2022/10/08 10:00</td>
+//           </tr>
+//         </tbody>
+//       </table>
+//       <h4>總金額 &nbsp; NT.5360</h4>
+//       <p>
+//         本郵件由系統自動產生與發送，請勿直接回覆。<br />
+//         如欲查詢訂單狀況，請至「手手 Handmade」<b style="color: #e77656"
+//           >會員中心 > 訂單管理</b
+//         >
+//         &nbsp;查看。
+//       </p>`
