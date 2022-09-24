@@ -74,33 +74,34 @@ const createCourseOrderDetail = async (req, res) => {
       order_detail[i].quantity,
       total_amount,
       order_detail[i].price,
-      order_detail[i].date + order_detail[i].time,
+      `${order_detail[i].date} ${order_detail[i].time}`,
     ])
   }
   console.log('success submit courseOrderDetail')
   res.send('success')
 }
 
-// const getCourseOrder = async (req, res) => {
-//   const orderId = req.params.orderId
+const getCourseOrder = async (req, res) => {
+  const orderId = req.params.orderId
 
-//   const [data] = await pool.execute(
-//     `SELECT course_order.id, course_order.order_number,course_order.create_time,product_order.payment_id,product_order.total_amount,coupon.coupon_discount,coupon.discount_type_id ,payment.name AS payment_name FROM product_order JOIN coupon ON product_order.coupon_id = coupon.id
-//     JOIN payment ON product_order.payment_id = payment.id WHERE product_order.id =?`,
-//     [orderId]
-//   )
+  const [data] = await pool.execute(
+    `SELECT course_order.id,course_order.order_number, course_order.create_time, course_order.payment_id, course_order.total_amount, course_order.email,coupon.coupon_discount,coupon.discount_type_id , payment.name AS payment_name FROM course_order JOIN payment ON course_order.payment_id = payment.id JOIN coupon ON course_order.coupon_id = coupon.id WHERE course_order.id = ?`,
+    [orderId]
+  )
 
-//   const [dataDetail] = await pool.execute(
-//     `SELECT product_order_list.order_id, product_order_list.product_id,product_order_list.amount,product_order_list.price,product.name FROM product_order_list JOIN product ON product_order_list.product_id = product.id WHERE product_order_list.order_id =?`,
-//     [orderId]
-//   )
+  const [dataDetail] = await pool.execute(
+    `SELECT
+  course_order_list.course_id,course_order_list.course_stock_id,course_order_list.amount,course_order_list.total_amount,course_order_list.price,course_order.order_number,
+  course.name,course.note,course_stock.time_start,course_stock.time_end,course_stock.date,store.address,category.category_name FROM course_order_list JOIN course_order ON course_order.id = course_order_list.order_id JOIN course ON course_order_list.course_id = course.id JOIN course_stock ON course_order_list.course_stock_id = course_stock.id JOIN store ON course.store_id = store.id JOIN category ON category.id = course.category_id WHERE course_order_list.order_id =?`,
+    [orderId]
+  )
 
-//   const response = data.map((v) => {
-//     v['orderDetail'] = dataDetail
-//     return v
-//   })
+  const response = data.map((v) => {
+    v['orderDetail'] = dataDetail
+    return v
+  })
 
-//   res.json(response)
-// }
+  res.json(response)
+}
 
-module.exports = { createProductOrder, createProductOrderDetail, getProductOrder, createCourseOrder, createCourseOrderDetail }
+module.exports = { createProductOrder, createProductOrderDetail, getProductOrder, createCourseOrder, createCourseOrderDetail, getCourseOrder }
