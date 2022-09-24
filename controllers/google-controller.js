@@ -23,17 +23,17 @@ const addToSchedule = async (req, res) => {
   const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
   //TODO: 填滿 summary、location、description、start、 end
-  const { name, address, note, start, end } = req.body
+  const { name, address, note, date, time_start, time_end } = req.body
   let event = {
     summary: name,
     location: address,
     description: note,
     start: {
-      dateTime: '2022-09-18T05:40:00',
+      dateTime: `${date}T${time_start}:00`,
       timeZone: 'Asia/Taipei',
     },
     end: {
-      dateTime: '2022-09-21T06:00:00',
+      dateTime: `${date}T${time_end}:00`,
       timeZone: 'Asia/Taipei',
     },
     reminders: {
@@ -46,6 +46,7 @@ const addToSchedule = async (req, res) => {
 
     colorId: 4,
   }
+  console.log('req.body', req.body)
 
   await calendar.freebusy.query(
     {

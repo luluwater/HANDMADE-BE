@@ -1,5 +1,4 @@
 const pool = require('../configs/mysql')
-const moment = require('../node_modules/moment')
 
 // ==================== product order ====================
 
@@ -10,6 +9,8 @@ const createProductOrder = async (req, res) => {
     `INSERT IGNORE INTO product_order (id,order_number,user_id,coupon_id,create_time,payment_id,delivery_id,total_amount,payment_state_id,order_state_id,address,phone,name,note,valid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [id, orderNumber, user_id, coupon_id, create_time, payment_id, delivery_id, total_amount, payment_state_id, order_state_id, address, phone, name, note, 1]
   )
+  console.log('success submit productOrder')
+  res.send('success')
 }
 
 const createProductOrderDetail = async (req, res) => {
@@ -104,4 +105,4 @@ const getCourseOrder = async (req, res) => {
   res.json(response)
 }
 
-module.exports = { createProductOrder, createProductOrderDetail, getProductOrder, createCourseOrder, createCourseOrderDetail, getCourseOrder } 
+module.exports = { createProductOrder, createProductOrderDetail, getProductOrder, createCourseOrder, createCourseOrderDetail, getCourseOrder }
