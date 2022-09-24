@@ -27,7 +27,7 @@ const addToSchedule = async (req, res) => {
   let event = {
     summary: name,
     location: address,
-    description:note,
+    description: note,
     start: {
       dateTime: '2022-09-18T05:40:00',
       timeZone: 'Asia/Taipei',
