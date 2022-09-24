@@ -1,6 +1,5 @@
 const pool = require('../configs/mysql')
 
-
 // ==================== product order ====================
 
 const createProductOrder = async (req, res) => {
