@@ -116,7 +116,7 @@ const orderConfirmation = async (req, res) => {
     // const mailOptions = {
     //   ...mailoptions,
     // }
-    mailoptions.html = pug.renderFile(__dirname + '..', '/view/layout.pug', { text: '手手' })
+    mailoptions.html = pug.renderFile(__filename + '../', 'view/layout.pug', { text: '手手' })
 
     // mailOptions.html = pug.renderFile(__dirname + '/views/mail_template.pug', { text: '狗王' })
 

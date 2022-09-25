@@ -22,31 +22,48 @@ const SocketServer = async (server) => {
   //   })
   // })
 
+  // io.on('connection', (socket) => {
+  //   // console.log('some one connection')
+
+  //   socket.emit('rooms', rooms)
+
+  //   // socket.on('joinRoomMsg', (welcomeMsg) => {
+  //   //   console.log('welcomeMsg', welcomeMsg)
+  //   //   io.emit('welcomeMsg', welcomeMsg)
+  //   // })
+
+  //   // socket.on('sendMessage', (data) => {
+  //   //   socket.emit('receiveMsg', data)
+  //   // })
+
+  //   // socket.on('sendMsg', (msg) => {
+  //   //   console.log(msg)
+
+  //   //   io.emit('responseMsg', msg)
+  //   // })
+
+  //   // socket.emit('message', 'welcome to chatCord')
+  //   // socket.broadcast.emit('message', 'A user has join the chat')
+
+  //   socket.on('disconnect', () => {
+  //     io.emit('message', 'A USER HAS LEFT THE CHAT')
+  //   })
+  // })
+
   io.on('connection', (socket) => {
-    console.log('some one connection')
+    socket.emit('roomMsg', '歡迎加入')
 
-    socket.emit('rooms', rooms)
-
-    socket.on('joinRoomMsg', (welcomeMsg) => {
-      console.log('welcomeMsg', welcomeMsg)
-      socket.emit('welcomeMsg', welcomeMsg)
+    socket.on('roomMsg', (roomMsg) => {
+      io.emit('roomMsg', roomMsg)
     })
 
-    socket.on('sendMessage', (data) => {
-      socket.emit('receiveMsg', data)
+    socket.on('sendMsg', (sendMsg) => {
+      console.log('sendMsgsendMsgsendMsg', sendMsg)
+      io.emit('sendMsg', sendMsg)
     })
-
-    // socket.on('sendMsg', (msg) => {
-    //   console.log(msg)
-
-    //   io.emit('responseMsg', msg)
-    // })
-
-    // socket.emit('message', 'welcome to chatCord')
-    // socket.broadcast.emit('message', 'A user has join the chat')
 
     socket.on('disconnect', () => {
-      io.emit('message', 'A USER HAS LEFT THE CHAT')
+      io.emit('roomMsg', 'A USER HAS LEFT THE CHAT')
     })
   })
 }
