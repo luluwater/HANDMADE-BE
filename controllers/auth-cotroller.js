@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 
 // http://localhost:8080/api/auth/register
 const register = async (req, res) => {
-  const { id, account, email, password, create_time } = req.body
+  const { id, avatar, account, email, password, create_time } = req.body
 
   console.log(req.body)
 
@@ -16,12 +16,15 @@ const register = async (req, res) => {
 
   let [users] = await pool.execute('SELECT * FROM user WHERE email = ?', [email])
 
+  let newAvatar = avatar || 'http://localhost:8080/user_048a23c0-41b2-45ca-8e25-0b4f090d3585..png'
+
   if (users.length > 0) return res.status(400).json({ message: '這個 email 已經註冊過' })
 
   let hashedPassword = await bcrypt.hash(password, 10)
 
-  let result = await pool.execute('INSERT INTO user (id, account, email, password, state, create_time ) VALUES (?, ?, ?, ? , ?, ?);', [
+  let result = await pool.execute('INSERT INTO user (id, avatar, account, email, password, state, create_time ) VALUES (?, ?, ?, ?, ? , ?, ?);', [
     id,
+    newAvatar,
     account,
     email,
     hashedPassword,
