@@ -12,58 +12,23 @@ const SocketServer = async (server) => {
 
   let rooms = await getChatRoomTest()
 
-  // io.on('connection', (socket) => {
-  //   socket.emit('rooms', rooms)
-  //   socket.on('join', (data) => {
-  //     socket.emit('welcome-user-msg', `${data.userData.account} 加入${data.currentChat.room_title}`)
-  //   })
-  //   socket.on('msgFromClient', (msg) => {
-  //     io.emit('responseMsg', msg)
-  //   })
-  // })
-
-  // io.on('connection', (socket) => {
-  //   // console.log('some one connection')
-
-  //   socket.emit('rooms', rooms)
-
-  //   // socket.on('joinRoomMsg', (welcomeMsg) => {
-  //   //   console.log('welcomeMsg', welcomeMsg)
-  //   //   io.emit('welcomeMsg', welcomeMsg)
-  //   // })
-
-  //   // socket.on('sendMessage', (data) => {
-  //   //   socket.emit('receiveMsg', data)
-  //   // })
-
-  //   // socket.on('sendMsg', (msg) => {
-  //   //   console.log(msg)
-
-  //   //   io.emit('responseMsg', msg)
-  //   // })
-
-  //   // socket.emit('message', 'welcome to chatCord')
-  //   // socket.broadcast.emit('message', 'A user has join the chat')
-
-  //   socket.on('disconnect', () => {
-  //     io.emit('message', 'A USER HAS LEFT THE CHAT')
-  //   })
-  // })
-
   io.on('connection', (socket) => {
     socket.emit('roomMsg', '歡迎加入')
 
     socket.on('roomMsg', (roomMsg) => {
-      io.emit('roomMsg', roomMsg)
+      socket.join(roomMsg.roomName)
+
+      socket.broadcast.to(roomMsg.roomName).emit('roomMsg', `${roomMsg.user?.account} 已加入 ${roomMsg.roomName}`)
     })
 
     socket.on('sendMsg', (sendMsg) => {
-      console.log('sendMsgsendMsgsendMsg', sendMsg)
-      io.emit('sendMsg', sendMsg)
+      // io.emit('sendMsg', sendMsg?.room_id)
+      console.log('sendMsg.room_id', sendMsg.room_id)
+      io.to(sendMsg.room_id).emit('sendMsg', sendMsg)
     })
 
-    socket.on('disconnect', () => {
-      io.emit('roomMsg', 'A USER HAS LEFT THE CHAT')
+    socket.on('left', (data) => {
+      io.emit('leftMsg', `${data.user.account} 已離開 ${data.room.room_title}`)
     })
   })
 }
