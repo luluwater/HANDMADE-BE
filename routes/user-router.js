@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { getUserAccount, updateUserPassword, updateUserAccount } = require('../controllers/user-account-controller')
+const { getUserAccount, updateUserPassword, updateUserAccount, updateUserAvatar, getAvatar } = require('../controllers/user-account-controller')
 const { getGirlCoupon } = require('../controllers/user-coupon-controller')
 const {
   getUserCourseOrders,
@@ -18,6 +18,8 @@ const { getUserBlog } = require('../controllers/user-blog-controller')
 router.get('/:userId', getUserAccount)
 router.put('/password', updateUserPassword)
 router.put('/account', updateUserAccount)
+router.put('/avatar', updateUserAvatar)
+router.get('/avatar/img', getAvatar)
 
 router.get('/:userId/product-orders', getUserProductOrders)
 router.get('/product-orders/:orderNumber', getUserProductOrderDetails)
