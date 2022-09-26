@@ -128,7 +128,7 @@ const getProductDetail = async (req, res) => {
 const getProductComment = async (req, res) => {
   const productCommentId = req.params.productCommentId
   const [productComment] = await pool.execute(
-    `SELECT product_comment.*, user.name AS user_name FROM product_comment
+    `SELECT product_comment.*, user.avatar, user.name AS user_name FROM product_comment
   JOIN user ON product_comment.user_id = user.id WHERE product_id = ?`,
     [productCommentId]
   )

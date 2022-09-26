@@ -118,7 +118,7 @@ const getCourseDetail = async (req, res) => {
 const getCourseComment = async (req, res) => {
   const courseCommentId = req.params.courseCommentId
   const [courseComment] = await pool.execute(
-    `SELECT course_comment.*, user.name AS user_name FROM course_comment JOIN user ON course_comment.user_id = user.id WHERE course_id = ?`,
+    `SELECT course_comment.*, user.avatar, user.name AS user_name FROM course_comment JOIN user ON course_comment.user_id = user.id WHERE course_id = ?`,
     [courseCommentId]
   )
   const [imgs] = await pool.execute(`SELECT * FROM course_comment_img`)
