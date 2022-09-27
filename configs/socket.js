@@ -26,22 +26,10 @@ const SocketServer = async (server) => {
       io.emit('leftData', data)
     })
 
-    // socket.on('sendMsg', (sendMsg) => {
-    //   socket.join(sendMsg.room_title)
-    //   // socket.broadcast.to(sendMsg.room_title).emit('chat', sendMsg)
-    //   socket.broadcast.to(sendMsg.room_title).emit('chat', sendMsg)
-    // })
     socket.on('sendMsg', (sendMsg) => {
       socket.join(sendMsg.room_title)
-      // socket.broadcast.to(sendMsg.room_title).emit('chat', sendMsg)
       socket.broadcast.to(sendMsg.room_title).emit('chat', sendMsg)
     })
-
-    // socket.on('left', (data) => {
-    //   socket.join(data.room.room_title)
-    //   io.emit('leftMsg', data)
-    //   // io.emit('leftData', data)
-    // })
   })
 }
 

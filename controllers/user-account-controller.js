@@ -2,11 +2,37 @@ const pool = require('../configs/mysql')
 const { validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 
+// 所有預設照片
+const getAvatar = async (req, res) => {
+  const [data] = await pool.execute('SELECT * FROM avatar_img')
+  res.json(data)
+}
+
+//會員資料
 const getUserAccount = async (req, res) => {
   const userId = req.params.userId
 
   const [data] = await pool.execute('SELECT * FROM user WHERE user.id = ?', [userId])
   res.json(data)
+}
+
+//更新照片
+const updateUserAvatar = async (req, res) => {
+  const { id } = req.body
+  const avatar = req.body?.avatar
+
+  if (!avatar && req.files[0].filename) {
+    const avatarUrl = `http://localhost:8080/${req.files[0].filename}`
+
+    await pool.execute(`UPDATE user SET avatar = ? WHERE user.id = ?`, [avatarUrl, parseInt(id)])
+
+    res.json({ message: 'User Avatar 使用上傳' })
+  } else {
+    await pool.execute(`UPDATE user SET avatar = ? WHERE user.id = ?`, [avatar, id])
+    res.json({ message: 'User Avatar 選擇更新成功' })
+  }
+
+  return
 }
 
 //更新密碼
@@ -51,4 +77,4 @@ const updateUserAccount = async (req, res) => {
   res.json({ message: 'User account 更新成功' })
 }
 
-module.exports = { getUserAccount, updateUserPassword, updateUserAccount }
+module.exports = { getUserAccount, updateUserPassword, updateUserAccount, updateUserAvatar, getAvatar }

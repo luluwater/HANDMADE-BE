@@ -1,5 +1,5 @@
 const router = require('express').Router()
-
+const { upload } = require('../middlewares/uploadFiles')
 const { getAllBlog, getBlogDetail, createBlog, deleteBlog, updateBlog, uploadBlogImg, hideBlog, showBlog } = require('../controllers/blog-controller')
 
 router.get('/', getAllBlog)
@@ -16,6 +16,6 @@ router.put('/:blogId/show', showBlog)
 
 router.put('/:blogId/edit', updateBlog)
 
-router.post('/:blogId/upload_files', uploadBlogImg)
+router.post('/:blogId/upload_files', upload.array('files'), uploadBlogImg)
 
 module.exports = router

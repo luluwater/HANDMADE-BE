@@ -116,6 +116,8 @@ const uploadBlogImg = async (req, res) => {
   const imgUrl = await req.files[0].filename
   const blogId = req.params.blogId
 
+  console.log('imgUrlimgUrl', imgUrl)
+
   await pool.execute('INSERT IGNORE INTO blog_img (id, img_name, blog_id) VALUES (? , ? , ?)', [id, imgUrl, blogId])
 
   console.log('success')

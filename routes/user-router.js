@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { getUserAccount, updateUserPassword, updateUserAccount } = require('../controllers/user-account-controller')
+const { getUserAccount, updateUserPassword, updateUserAccount, updateUserAvatar, getAvatar } = require('../controllers/user-account-controller')
 const { getGirlCoupon } = require('../controllers/user-coupon-controller')
 const {
   getUserCourseOrders,
@@ -14,10 +14,13 @@ const {
 } = require('../controllers/user-details-controller')
 const { userLikesCourse, userLikesProduct } = require('../controllers/user-likes-controller')
 const { getUserBlog } = require('../controllers/user-blog-controller')
+const { upload } = require('../middlewares/uploadFiles')
 
 router.get('/:userId', getUserAccount)
 router.put('/password', updateUserPassword)
 router.put('/account', updateUserAccount)
+router.put('/avatar', upload.array('files'), updateUserAvatar)
+router.get('/avatar/img', getAvatar)
 
 router.get('/:userId/product-orders', getUserProductOrders)
 router.get('/product-orders/:orderNumber', getUserProductOrderDetails)

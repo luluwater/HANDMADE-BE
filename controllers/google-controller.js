@@ -71,7 +71,7 @@ const addToSchedule = async (req, res) => {
   res.send('done')
 }
 
-//TODO:訂單確認信內容塞入訂單編號
+//TODO:PUG 訂單確認信內容塞入訂單編號
 //POST http://localhost:8080/api/google/orderConfirmation
 const orderConfirmation = async (req, res) => {
   const authRefreshData = await authorize()
@@ -160,7 +160,6 @@ const sendValidationMail = async (req, res) => {
     refreshToken,
   }
 
-  //TODO:把 GMAIL 和內容放在這
   const mailoptions = {
     from: 'Siddhant &lt;<angusapril648@gmail.com>',
     to: mail,
@@ -177,10 +176,6 @@ const sendValidationMail = async (req, res) => {
       },
     })
 
-    /**
-     * ! 內容寫在 text 裡面
-     * TODO: 從前端送來的 req.body 的 context 放到這裡面來
-     */
     const mailOptions = {
       ...mailoptions,
       html: `<br>親愛的會員您好，</br>
