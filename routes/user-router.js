@@ -15,11 +15,12 @@ const {
 } = require('../controllers/user-details-controller')
 const { userLikesCourse, userLikesProduct } = require('../controllers/user-likes-controller')
 const { getUserBlog } = require('../controllers/user-blog-controller')
+const { upload } = require('../middlewares/uploadFiles')
 
 router.get('/:userId', getUserAccount)
 router.put('/password', updateUserPassword)
 router.put('/account', updateUserAccount)
-router.put('/avatar', updateUserAvatar)
+router.put('/avatar', upload.array('files'), updateUserAvatar)
 router.get('/avatar/img', getAvatar)
 
 router.get('/:userId/product-orders', getUserProductOrders)

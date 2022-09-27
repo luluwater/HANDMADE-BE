@@ -18,11 +18,21 @@ const getUserAccount = async (req, res) => {
 
 //更新照片
 const updateUserAvatar = async (req, res) => {
-  const { id, avatar } = req.body
-  await pool.execute(`UPDATE user SET avatar = ? WHERE user.id = ?`, [avatar, id])
+  const { id } = req.body
+  const avatar = req.body?.avatar
 
-  console.log('User Avatar UPDATE success!!')
-  res.json({ message: 'User Avatar 更新成功' })
+  if (!avatar && req.files[0].filename) {
+    const avatarUrl = `http://localhost:8080/${req.files[0].filename}`
+
+    await pool.execute(`UPDATE user SET avatar = ? WHERE user.id = ?`, [avatarUrl, parseInt(id)])
+
+    res.json({ message: 'User Avatar 使用上傳' })
+  } else {
+    await pool.execute(`UPDATE user SET avatar = ? WHERE user.id = ?`, [avatar, id])
+    res.json({ message: 'User Avatar 選擇更新成功' })
+  }
+
+  return
 }
 
 //更新密碼
