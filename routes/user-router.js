@@ -11,6 +11,7 @@ const {
   productOrderDetails,
   productOrderPay,
   getUserCoupons,
+  updateUserCourseComment,
 } = require('../controllers/user-details-controller')
 const { userLikesCourse, userLikesProduct } = require('../controllers/user-likes-controller')
 const { getUserBlog } = require('../controllers/user-blog-controller')
@@ -27,6 +28,7 @@ router.get('/product-orders/:orderNumber/details', productOrderDetails)
 router.get('/product-orders/:orderNumber/details/pay', productOrderPay)
 
 router.get('/:userId/course-orders', getUserCourseOrders)
+router.put('/course-orders/comment', updateUserCourseComment)
 router.get('/course-orders/:orderNumber', getUserCourseOrderDetails)
 router.get('/course-orders/:orderNumber/details', courseOrderDetails)
 router.get('/course-orders/:orderNumber/details/pay', courseOrderPay)

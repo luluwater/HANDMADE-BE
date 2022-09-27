@@ -25,11 +25,20 @@ const getUserCourseOrderDetails = async (req, res) => {
   res.json(dataCourseDetails)
 }
 
+//新增課程訂單的評價
+const updateUserCourseComment = async (req, res) => {
+  const { user_id, course_id, pubilsh_time, content, score,  } = req.body
+  await pool.execute(`INSERT INTO course_comment (user_id, course_id, pubilsh_time, content, score) VALUES (?, ?, ?, ?, ?)`, [user_id, course_id, pubilsh_time, content, score])
+
+  console.log('User Comment INSERT success!!')
+  res.json({ message: 'User Comment 新增成功' })
+}
+
 //課程訂單的課程細節
 const courseOrderDetails = async (req, res) => {
   const order_number = req.params.orderNumber
   const data = await pool.execute(
-    'SELECT course_order_list.*, course.name AS course_name, course.category_id, category.category_en_name FROM course_order_list JOIN course ON course_order_list.course_id = course.id JOIN category ON course.category_id = category.id JOIN course_order ON course_order_list.order_id = course_order.id WHERE course_order.order_number = ?',
+    'SELECT course_order_list.*, user_id, course.name AS course_name, course.category_id, category.category_en_name FROM course_order_list JOIN course ON course_order_list.course_id = course.id JOIN category ON course.category_id = category.id JOIN course_order ON course_order_list.order_id = course_order.id WHERE course_order.order_number = ?',
     [order_number]
   )
 
@@ -126,4 +135,5 @@ module.exports = {
   productOrderDetails,
   productOrderPay,
   getUserCoupons,
+  updateUserCourseComment,
 }
