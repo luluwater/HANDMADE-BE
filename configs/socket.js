@@ -14,8 +14,7 @@ const SocketServer = async (server) => {
 
     socket.on('roomMsg', (roomMsg) => {
       socket.join(roomMsg.roomName)
-
-      socket.broadcast.to(roomMsg.roomName).emit('joinData', roomMsg)
+      io.emit('joinData', roomMsg)
       socket.broadcast.to(roomMsg.roomName).emit('roomMsg', `${roomMsg.user?.account} 已加入 ${roomMsg.roomName}`)
     })
 
