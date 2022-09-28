@@ -18,16 +18,18 @@
 
 # 架構
 
-> ### server : 統整所有 server 程式碼的地方 
+> ### server : 統整所有 server 程式碼的地方
 >
 > > ### router : 主程式(server.js) 與邏輯 (controller) 溝通的橋樑
 > >
 > > > ### controller : 與資料庫溝通(需要邏輯也寫這裡)
 
 ### server.js 檔紀錄各類別路由
+
 - restful API 主體(ex./api/user)
 - 第一個參數：要到達的路由
 - 第二個參數：router
+
 ```javaScript
 app.use('/api/product', productRouter)
 app.use('/api/course', courseRouter)
@@ -35,7 +37,8 @@ app.use('/api/store', storeRouter)
 ```
 
 ### routers 資料夾存放各細項路由及 api 類型
-- restful API 動詞( get ,  post, put , delete )
+
+- restful API 動詞( get , post, put , delete )
 - 第一個參數：要到達的路由
 - 第二個參數：call back 函式 (放入 controller export 出來的函式)
 
@@ -51,6 +54,7 @@ module.exports = router
 ```
 
 ### controllers 資料夾存放 api 方法
+
 - 在 controllers 資料夾中新增 reply-controller.js 檔案，裡面寫與 db 溝通的 sql 語法(記得引入資料庫)，最後要 export 出寫好的 function。
 
 ```javascript
@@ -73,3 +77,31 @@ const getStoreCourse = async (req, res) => {
   res.json(reaponse)
 }
 ```
+
+
+
+
+<!--
+#### [後端技術](#Backend-technique)
+
+- [Node.js](#Node.js)
+
+#### [資料庫](#database)
+
+- [MySQL](#MySQL) -->
+
+
+
+#### Backend
+
+<!-- - Using [mocha](https://github.com/mochajs/mocha) / [chai](https://github.com/chaijs/chai) / [sinon](https://github.com/sinonjs/sinon) / [supertest](https://github.com/visionmedia/supertest) for Unit Testing(Model / Request) and [Travis CI](https://travis-ci.org/) for continuous integration
+- Using [NewebPay](https://www.newebpay.com/) as the third party payment API for user to pay subscription fee with credit card online
+- Using [PostGIS](https://github.com/postgis/postgis) to help calculate geodesic distance
+- Using [express-validator](https://github.com/express-validator/express-validator) for data validation
+- Using [JSON Web Tokens](https://github.com/auth0/node-jsonwebtoken) to add token based authentication to RESTful API
+- Using [nodemailer](https://github.com/nodemailer/nodemailer) to send email with Node.js after user sign up or place an order
+- Using [Multer](https://github.com/expressjs/multer) 、[imgur-node-api](https://github.com/jamiees2/imgur-node-api) for file upload feature
+- Using [bcryptjs](https://github.com/dcodeIO/bcrypt.js) to hash and check password
+- Using [dotenv](https://github.com/motdotla/dotenv) to help load the environment variables saved in .env file
+- Using [node-cron](https://github.com/node-cron/node-cron) as the task scheduler to automatically update order and meal data in the database
+- Using [moment.js](https://github.com/moment/moment/) to parse date and time that are consistent with front-end and database -->
