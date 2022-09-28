@@ -12,6 +12,7 @@ const {
   productOrderPay,
   getUserCoupons,
   updateUserCourseComment,
+  updateUserProductComment,
 } = require('../controllers/user-details-controller')
 const { userLikesCourse, userLikesProduct } = require('../controllers/user-likes-controller')
 const { getUserBlog } = require('../controllers/user-blog-controller')
@@ -24,6 +25,7 @@ router.put('/avatar', upload.array('files'), updateUserAvatar)
 router.get('/avatar/img', getAvatar)
 
 router.get('/:userId/product-orders', getUserProductOrders)
+router.put('/product-orders/comment', updateUserProductComment)
 router.get('/product-orders/:orderNumber', getUserProductOrderDetails)
 router.get('/product-orders/:orderNumber/details', productOrderDetails)
 router.get('/product-orders/:orderNumber/details/pay', productOrderPay)

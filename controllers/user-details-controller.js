@@ -27,7 +27,7 @@ const getUserCourseOrderDetails = async (req, res) => {
 
 //新增課程訂單的評價
 const updateUserCourseComment = async (req, res) => {
-  const { user_id, course_id, pubilsh_time, content, score,  } = req.body
+  const { user_id, course_id, pubilsh_time, content, score } = req.body
   await pool.execute(`INSERT INTO course_comment (user_id, course_id, pubilsh_time, content, score) VALUES (?, ?, ?, ?, ?)`, [user_id, course_id, pubilsh_time, content, score])
 
   console.log('User Comment INSERT success!!')
@@ -75,6 +75,15 @@ const getUserProductOrders = async (req, res) => {
   res.json(data)
 }
 
+//新增商品訂單的評價
+const updateUserProductComment = async (req, res) => {
+  const { user_id, product_id, pubilsh_time, content, score } = req.body
+  await pool.execute(`INSERT INTO product_comment (user_id, product_id, pubilsh_time, content, score) VALUES (?, ?, ?, ?, ?)`, [user_id, product_id, pubilsh_time, content, score])
+
+  console.log('User product INSERT success!!')
+  res.json({ message: 'User product 新增成功' })
+}
+
 //商品訂單的收件細節
 const getUserProductOrderDetails = async (req, res) => {
   const order_number = req.params.orderNumber
@@ -89,7 +98,7 @@ const getUserProductOrderDetails = async (req, res) => {
 const productOrderDetails = async (req, res) => {
   const order_number = req.params.orderNumber
   const data = await pool.execute(
-    'SELECT product_order_list.*, product.name AS product_name, product.category_id, category.category_en_name FROM product_order_list JOIN product ON product_order_list.product_id = product.id JOIN category ON product.category_id = category.id JOIN product_order ON product_order_list.order_id = product_order.id WHERE product_order.order_number = ?',
+    'SELECT product_order_list.*, user_id, product.name AS product_name, product.category_id, category.category_en_name FROM product_order_list JOIN product ON product_order_list.product_id = product.id JOIN category ON product.category_id = category.id JOIN product_order ON product_order_list.order_id = product_order.id WHERE product_order.order_number = ?',
     [order_number]
   )
 
@@ -136,4 +145,5 @@ module.exports = {
   productOrderPay,
   getUserCoupons,
   updateUserCourseComment,
+  updateUserProductComment,
 }
