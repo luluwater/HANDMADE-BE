@@ -1,5 +1,4 @@
 const router = require('express').Router()
-// const { ecpay } = require('../middlewares/ecpay')
 
 const { createProductOrder, createProductOrderDetail, getProductOrder, createCourseOrder, createCourseOrderDetail, getCourseOrder } = require('../controllers/order-controller')
 
