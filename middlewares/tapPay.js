@@ -1,7 +1,9 @@
 const { default: axios } = require('axios')
 require('dotenv').config()
 
-const payByPrime = async (req, res) => {
+const payByPrime = async (req, res, next) => {
+  if (req.body.payment_id === 3) next()
+
   const partner_key = process.env.PAYMENT_PARNER_KEY
   const merchant_id = process.env.MERCHANT_ID
 
@@ -10,13 +12,12 @@ const payByPrime = async (req, res) => {
     partner_key: partner_key,
     merchant_id: merchant_id,
     details: req.body.details,
-    amount: req.body.amount,
+    amount: req.body.total_amount,
     cardholder: {
-      phone_number: req.body.cardholder.phone_number,
-      name: req.body.cardholder.name,
-      email: req.body.cardholder.email,
+      phone_number: req.body.phone,
+      name: req.body.name,
+      email: req.body.email,
     },
-    remember: true,
   }
 
   axios
@@ -28,9 +29,10 @@ const payByPrime = async (req, res) => {
     })
     .then((response) => {
       console.log('susses', response.data)
-      return res.json({
-        result: response.data,
-      })
+      // return res.json({
+      //   result: response.data,
+      // })
+      next()
     })
     .catch(() => console.error())
 }

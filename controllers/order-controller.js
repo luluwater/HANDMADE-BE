@@ -3,6 +3,7 @@ const pool = require('../configs/mysql')
 // ==================== product order ====================
 
 const createProductOrder = async (req, res) => {
+  console.log('createProductOrder')
   const { id, orderNumber, user_id, coupon_id, create_time, name, phone, delivery_id, payment_id, address, note, total_amount, payment_state_id, order_state_id } = req.body
 
   await pool.execute(
@@ -14,6 +15,8 @@ const createProductOrder = async (req, res) => {
 }
 
 const createProductOrderDetail = async (req, res) => {
+  console.log('createProductOrderDetail')
+
   const { id, order_detail } = req.body
 
   for (let i = 0; i < order_detail.length; i++) {
@@ -54,6 +57,9 @@ const getProductOrder = async (req, res) => {
 // ==================== course order ====================
 
 const createCourseOrder = async (req, res) => {
+  console.log('reqreqreqreqreqreq', req)
+  console.log('req.bodyreq.bodyreq.', req.body)
+
   const { id, orderNumber, user_id, coupon_id, create_time, payment_id, total_amount, order_state_id, name, phone, email, note } = req.body
 
   await pool.execute(
