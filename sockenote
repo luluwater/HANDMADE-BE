@@ -1,27 +1,24 @@
+// socket.emit("message",'welcome to chat')
 
-       // socket.emit("message",'welcome to chat')
+// socket.broadcast.emit('message','A user has joined the chat')
+// socket.on('disconnect',()=>{
+//   io.emit('message','A user has left the chat')
+// })
 
-    // socket.broadcast.emit('message','A user has joined the chat')
-  
-    // socket.on('disconnect',()=>{
-    //   io.emit('message','A user has left the chat')
-    // })
+// socket.on('chatMsg',(msg)=>{
+//   io.emit('message',msg)
+// })
+// socket.broadcast.emit('message','broadcast user has joined the chat')
+// socket.on('joinRoom', (currentRoom) => {
+//   socket.join(currentRoom.id)
+//   console.log('currentRoom',currentRoom.id)
+// })
 
-    // socket.on('chatMsg',(msg)=>{
-    //   io.emit('message',msg)
-    // })
-  // socket.broadcast.emit('message','broadcast user has joined the chat')
-    // socket.on('joinRoom', (currentRoom) => {
-    //   socket.join(currentRoom.id)
-    //   console.log('currentRoom',currentRoom.id)
-    // })
+// socket.on('send-message',({ recipient, text})=>{})
 
-    // socket.on('send-message',({ recipient, text})=>{})
-
-    
-  // socket 開始
-  /**
-   * namesSpace 很像 endpoint，但不是真正的 endpoint
-   * 可以透過不同的 namespace來創建不同的room
-   * join and leaving
-   */
+// socket 開始
+/**
+* namesSpace 很像 endpoint，但不是真正的 endpoint
+* 可以透過不同的 namespace來創建不同的room
+* join and leaving
+*/
