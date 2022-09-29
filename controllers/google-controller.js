@@ -87,7 +87,10 @@ const orderConfirmation = async (req, res) => {
 
   const { orderNumber, order_detail, create_time, total_amount } = req.body
 
-  console.log(orderNumber, order_detail, create_time, total_amount)
+  console.log('orderNumberorderNumber', orderNumber)
+  console.log('order_detailorder_detail', order_detail)
+  console.log('create_timecreate_time', create_time)
+  console.log('total_amounttotal_amount', total_amount)
 
   const auth = {
     type: 'OAuth2',
@@ -113,16 +116,15 @@ const orderConfirmation = async (req, res) => {
       },
     })
 
-    // const mailOptions = {
-    //   ...mailoptions,
-    // }
-    mailoptions.html = pug.renderFile(__filename + '../', 'view/layout.pug', { text: '手手' })
+    const mailOptions = {
+      ...mailoptions,
+    }
+    console.log('__dirname__dirname', __dirname)
 
-    // mailOptions.html = pug.renderFile(__dirname + '/views/mail_template.pug', { text: '狗王' })
+    mailOptions.html = pug.renderFile(__dirname, '../views/orderConfirm.pug', { orderNumber, order_detail, create_time, total_amount })
 
-    //TODO: html:裡面寫從前端送來的 req.body 的 context 放到這裡面來
     const result = await transport.sendMail(mailoptions)
-    console.log('Success send the mail')
+
     res.send(result)
   } catch (error) {
     console.log(error)
@@ -202,43 +204,3 @@ module.exports = {
   sendValidationMail,
   addToSchedule,
 }
-
-// : `<h1>您的訂單已完成，謝謝您的訂購！</h1>
-//       <b style="color: #e77656">
-//         此信件為重要信件，交易完成前請保留此信件以利查詢。
-//       </b>
-//       <h3>訂單編號 &nbsp; #221012088</h3>
-//       <h4>訂單成立時間 &nbsp; 2022-09-24 </h4>
-//       <table style="width: 40%; border: 1px solid #5f5c51; padding: 20px">
-//         <tbody>
-//           <tr>
-//             <td style="width: 15%">商品類別</td>
-//             <td style="width: 25%">商品名稱</td>
-//             <td style="width: 15%">數量</td>
-//             <td style="width: 15%">小計</td>
-//             <td style="width: 30%">備註</td>
-//           </tr>
-//           <tr>
-//             <td style="width: 15%">課程</td>
-//             <td style="width: 25%">陶盤進階手捏課程</td>
-//             <td style="width: 15%">2</td>
-//             <td style="width: 15%">2480</td>
-//             <td style="width: 30%">2022/10/18 13:00</td>
-//           </tr>
-//           <tr>
-//             <td style="width: 15%">課程</td>
-//             <td style="width: 25%">手綁鬱金香花束</td>
-//             <td style="width: 15%">1</td>
-//             <td style="width: 15%">2880</td>
-//             <td style="width: 30%">2022/10/08 10:00</td>
-//           </tr>
-//         </tbody>
-//       </table>
-//       <h4>總金額 &nbsp; NT.5360</h4>
-//       <p>
-//         本郵件由系統自動產生與發送，請勿直接回覆。<br />
-//         如欲查詢訂單狀況，請至「手手 Handmade」<b style="color: #e77656"
-//           >會員中心 > 訂單管理</b
-//         >
-//         &nbsp;查看。
-//       </p>`

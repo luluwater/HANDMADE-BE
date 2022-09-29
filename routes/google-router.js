@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const { auth, addToSchedule, sendValidationMail, orderConfirmation } = require('../controllers/google-controller')
 
-router.post('/orderConfirmation', orderConfirmation)
+// router.post('/orderConfirmation', orderConfirmation)
 
 router.post('/validationMail', sendValidationMail)
 
