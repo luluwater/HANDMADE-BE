@@ -94,7 +94,7 @@ const resetPassword = async (req, res) => {
   if (email === undefined) return
   await pool.execute(`UPDATE user SET password = ? WHERE user.email = ?`, [hashedPassword, email])
 
-  console.log('User password UPDATE success!!')
+  console.log('User google mail in auth controller password UPDATE success!!')
   res.json({ message: '更新成功' })
 }
 

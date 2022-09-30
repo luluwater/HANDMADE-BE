@@ -64,6 +64,6 @@ async function authorize() {
   }
   return client
 }
-authorize()
+// authorize()
 
-// module.exports = { authorize }
+module.exports = { authorize }

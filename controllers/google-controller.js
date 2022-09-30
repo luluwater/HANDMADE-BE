@@ -71,7 +71,6 @@ const addToSchedule = async (req, res) => {
   res.send('done')
 }
 
-//TODO:PUG 訂單確認信內容塞入訂單編號
 //POST http://localhost:8080/api/google/orderConfirmation
 const orderConfirmation = async (req, res) => {
   const authRefreshData = await authorize()
