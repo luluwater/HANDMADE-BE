@@ -44,7 +44,6 @@ app.use(
     store: new FileStore({
       path: path.join(__dirname, 'sessions'),
     }),
-    // secret: process.env.SESSION_SECRET,
     secret: 'secret',
     resave: false,
     saveUninitialized: false,
@@ -76,78 +75,6 @@ app.use('/api/coupon', couponRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
-})
-
-//Pug test
-app.get('/layout', (req, res) => {
-  let data = {
-    id: 8850,
-    orderNumber: 1664510058811,
-    user_id: 9974,
-    coupon_id: 28,
-    create_time: '2022-09-30',
-    payment_id: '3',
-    total_amount: 2960,
-    order_state_id: '1',
-    name: 'qewr',
-    phone: '096435',
-    email: 'angus22334@gmail.com',
-    note: '',
-    details: ' 卡士達草莓塔',
-    order_detail: [
-      {
-        id: 47,
-        stockId: 775,
-        name: '卡士達草莓塔',
-        img: '烘焙_課程_CookCorner 廚藝角落_【冬季限定｜卡士達草莓塔】_3.jpg',
-        price: 2960,
-        category: 'bakery',
-        date: '2022-10-20',
-        time: '14:30',
-        quantity: 1,
-        totalPrice: 2960,
-        stocks: 10,
-        stockWarning: '',
-        categoryName: '烘焙',
-      },
-      {
-        id: 47,
-        stockId: 775,
-        name: '卡士達草莓塔',
-        img: '烘焙_課程_CookCorner 廚藝角落_【冬季限定｜卡士達草莓塔】_3.jpg',
-        price: 2960,
-        category: 'bakery',
-        date: '2022-10-20',
-        time: '14:30',
-        quantity: 1,
-        totalPrice: 2960,
-        stocks: 10,
-        stockWarning: '',
-        categoryName: '金工',
-      },
-      {
-        id: 47,
-        stockId: 775,
-        name: '卡士達草莓塔',
-        img: '烘焙_課程_CookCorner 廚藝角落_【冬季限定｜卡士達草莓塔】_3.jpg',
-        price: 2960,
-        category: 'bakery',
-        date: '2022-10-20',
-        time: '14:30',
-        quantity: 1,
-        totalPrice: 2960,
-        stocks: 10,
-        stockWarning: '',
-        categoryName: '烘焙',
-      },
-    ],
-  }
-
-  let result = pug.renderFile(__dirname + '/views' + '/orderConfirm.pug', {
-    data,
-    order_detail: data.order_detail,
-  })
-  res.send(result)
 })
 
 const nodemailer = require('nodemailer')

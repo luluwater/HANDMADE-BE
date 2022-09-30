@@ -32,7 +32,6 @@ const payByPrime = async (req, res, next) => {
       return res.json({
         result: response.data,
       })
-      // next()
     })
     .catch(() => console.error())
 }
