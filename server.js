@@ -78,13 +78,6 @@ app.get('/', (req, res) => {
   res.send('homepage')
 })
 
-app.get('/layout', (req, res) => {
-  let result = pug.renderFile(__dirname + '/views' + '/orderConfirm.pug', {
-    text: 'angus',
-  })
-  res.send(result)
-})
-
 const nodemailer = require('nodemailer')
 const { google } = require('googleapis')
 const { authorize } = require('./configs/googleAuth')
