@@ -6,7 +6,7 @@ const getStore = async (req, res) => {
   // console.log(req.body)
 
   const [data] = await pool.execute(
-    'SELECT *, category.category_name, mrt.MRT_station, mrt.station_name FROM store JOIN category ON category.id = category_id JOIN mrt ON MRT_id = mrt.id'
+    'SELECT *, category.category_name, mrt.MRT_station, mrt.station_name FROM store JOIN category ON category.id = category_id JOIN mrt ON MRT_id = mrt.id '
   )
 
   const [kvImgs] = await pool.execute('SELECT * FROM store_kv')

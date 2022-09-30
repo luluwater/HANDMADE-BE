@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const path = require('path')
+const pug = require('pug')
 
 const app = express()
 const chatRouter = require('./routes/chat-router')
@@ -31,6 +32,9 @@ const corsOptions = {
 }
 
 app.use(express.json())
+
+app.set('view engine', 'pug')
+app.set('./', 'views')
 
 const expressSession = require('express-session')
 var FileStore = require('session-file-store')(expressSession)
@@ -72,6 +76,65 @@ app.use('/api/coupon', couponRouter)
 
 app.get('/', (req, res) => {
   res.send('homepage')
+})
+
+const nodemailer = require('nodemailer')
+const { google } = require('googleapis')
+const { authorize } = require('./configs/googleAuth')
+
+app.post('/api/google/orderConfirmation', async (req, res) => {
+  const authRefreshData = await authorize()
+  const clientId = authRefreshData._clientId
+  const clientSecret = authRefreshData._clientSecret
+  const refreshToken = authRefreshData.credentials.refresh_token
+  const redirect = authRefreshData.redirectUri
+  const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret, redirect)
+
+  oAuth2Client.setCredentials({
+    refresh_token: refreshToken,
+  })
+
+  const { orderNumber, order_detail, create_time, total_amount } = req.body
+
+  console.log('req.bodyreq.body', req.body)
+
+  const auth = {
+    type: 'OAuth2',
+    user: 'carzydarkcat@gmail.com',
+    clientId: clientId,
+    clientSecret: clientSecret,
+    refreshToken,
+  }
+
+  const mailoptions = {
+    from: 'Siddhant &lt;<angusapril648@gmail.com>',
+    to: 'carzydarkcat@gmail.com',
+    subject: '訂單成立',
+  }
+
+  try {
+    const accessToken = await oAuth2Client.getAccessToken()
+    const transport = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        ...auth,
+        accessToken: accessToken,
+      },
+    })
+
+    const mailOptions = {
+      ...mailoptions,
+    }
+
+    mailOptions.html = await pug.renderFile(__dirname + '/views' + '/orderConfirm.pug', { orderNumber, order_detail, create_time, total_amount })
+
+    const result = await transport.sendMail(mailOptions)
+
+    res.send(result)
+  } catch (error) {
+    console.log(error)
+    res.send(error)
+  }
 })
 
 server.listen(PORT, () => {

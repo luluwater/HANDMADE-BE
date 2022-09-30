@@ -1,0 +1,38 @@
+doctype html
+
+head
+  title Pug
+  script(type='text/javascript').
+    if (foo) bar(1 + 5)
+h1 &#x60A8;&#x7684;&#x8A02;&#x55AE;&#x5DF2;&#x5B8C;&#x6210;&#xFF0C;&#x8B1D;&#x8B1D;&#x60A8;&#x7684;&#x8A02;&#x8CFC;&#xFF01;
+b(style='color: #e77656')
+  | &#x6B64;&#x4FE1;&#x4EF6;&#x70BA;&#x91CD;&#x8981;&#x4FE1;&#x4EF6;&#xFF0C;&#x4EA4;&#x6613;&#x5B8C;&#x6210;&#x524D;&#x8ACB;&#x4FDD;&#x7559;&#x6B64;&#x4FE1;&#x4EF6;&#x4EE5;&#x5229;&#x67E5;&#x8A62;&#x3002;
+h4 &#x8A02;&#x55AE;&#x7DE8;&#x865F; &nbsp;#{orderNumber}
+table(style='width: 40%; border: 1px solid #5f5c51; padding: 20px')
+
+  tbody
+    tr
+      td(style='width: 15%') 商品類別
+      td(style='width: 25%') 商品名稱
+      td(style='width: 15%') 數量
+      td(style='width: 15%') 小計
+      td(style='width: 30%') 備註
+  each order_obj, i in order_detail 
+    tr
+      td= order_obj.categoryName
+      td= order_obj.name
+      td= order_obj.quantity
+      td= order_obj.totalPrice
+      td= order_obj.date + order_obj.time
+
+
+h4 &#x7E3D;&#x91D1;&#x984D; &nbsp; NT.#{total_amount}
+p
+  | &#x672C;&#x90F5;&#x4EF6;&#x7531;&#x7CFB;&#x7D71;&#x81EA;&#x52D5;&#x7522;&#x751F;&#x8207;&#x767C;&#x9001;&#xFF0C;&#x8ACB;&#x52FF;&#x76F4;&#x63A5;&#x56DE;&#x8986;&#x3002;
+  br
+  |       &#x5982;&#x6B32;&#x67E5;&#x8A62;&#x8A02;&#x55AE;&#x72C0;&#x6CC1;&#xFF0C;&#x8ACB;&#x81F3;&#x300C;&#x624B;&#x624B; Handmade&#x300D;
+  b(style='color: #e77656')
+  a(class='button' style='color: #e77656; font-weight: bolder' href='http://localhost:3000/user/orders') 會員中心 > 訂單管理
+  |       &nbsp;&#x67E5;&#x770B;&#x3002;
+
+

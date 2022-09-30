@@ -1,7 +1,3 @@
-/**
- * !生成 token json 檔案的檔案
- */
-
 const fs = require('fs').promises
 const path = require('path')
 const process = require('process')
