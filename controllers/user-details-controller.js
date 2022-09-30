@@ -88,7 +88,7 @@ const updateUserProductComment = async (req, res) => {
 const getUserProductOrderDetails = async (req, res) => {
   const order_number = req.params.orderNumber
   const [dataProductDetails] = await pool.execute(
-    'SELECT product_order.*, product_order.name AS product_order_name, user.name AS user_name, payment.name AS payment_name, order_staus.name AS order_staus_name FROM product_order JOIN coupon ON product_order.coupon_id = coupon.id JOIN order_staus ON product_order.order_state_id = order_staus.id JOIN payment ON product_order.payment_id = payment.id JOIN user ON product_order.user_id = user.id WHERE product_order.order_number = ?',
+    'SELECT product_order.*, delivery.name AS delivery_name, product_order.name AS product_order_name, user.name AS user_name, payment.name AS payment_name, order_staus.name AS order_staus_name FROM product_order JOIN coupon ON product_order.coupon_id = coupon.id JOIN order_staus ON product_order.order_state_id = order_staus.id JOIN delivery ON product_order.delivery_id = delivery.id JOIN payment ON product_order.payment_id = payment.id JOIN user ON product_order.user_id = user.id WHERE product_order.order_number = ?',
     [order_number]
   )
   res.json(dataProductDetails)
