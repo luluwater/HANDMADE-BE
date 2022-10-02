@@ -30,7 +30,7 @@ const SocketServer = async (server) => {
     socket.on('sendMsg', (sendMsg) => {
       socket.join(sendMsg.room_title)
 
-      console.log(sendMsg)
+      console.log('sendMsg in on sendMsg',sendMsg)
       
       socket.broadcast.to(sendMsg.room_title).emit('chat', sendMsg)
     })
