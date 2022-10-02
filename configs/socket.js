@@ -1,4 +1,5 @@
 const { Server } = require('socket.io')
+const { upload } = require('../middlewares/uploadFiles')
 
 const SocketServer = async (server) => {
   const io = new Server(server, {
@@ -28,6 +29,9 @@ const SocketServer = async (server) => {
 
     socket.on('sendMsg', (sendMsg) => {
       socket.join(sendMsg.room_title)
+
+      console.log(sendMsg)
+      
       socket.broadcast.to(sendMsg.room_title).emit('chat', sendMsg)
     })
   })

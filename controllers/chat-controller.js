@@ -54,10 +54,27 @@ const sendChatMessage = async (req, res) => {
   res.send('INSERT chatMsg success')
 }
 
+const chatImgUpload = (req,res) => {
+
+
+  if(req.files){
+    console.log(`http://localhost:8080/${req.files[0].filename}`)
+
+   const MsgImgUrl = `http://localhost:8080/${req.files[0].filename}`
+
+  console.log(MsgImgUrl)
+  return res.json(MsgImgUrl)
+  }
+
+  return res.status(500).json('no image upload')
+
+}
+
 module.exports = {
   getChatRooms,
   getChatRoom,
   sendChatMessage,
   getChatRoomTest,
   getChatMessages,
+  chatImgUpload,
 }

@@ -35,6 +35,8 @@ const updateUserAvatar = async (req, res) => {
   return
 }
 
+
+
 //更新密碼
 const updateUserPassword = async (req, res) => {
   const { id, password } = req.body
